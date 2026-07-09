@@ -1,0 +1,85 @@
+info:
+  name: Create Draft (ALL 26 fields reference)
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Reporte-Pacientes-Full",
+        "description": "Ejemplo con los 26 campos explicitos de database-reader",
+        "initial_state": "STOPPED",
+        "source": [
+          {
+            "template_codigo": "database-reader",
+            "properties": {
+              "polling_type": "INTERVAL",
+              "poll_on_start": true,
+              "polling_frequency": 10000,
+              "polling_hour": 6,
+              "polling_minute": 30,
+              "respond_after_processing": true,
+              "queue_buffer_size": 1500,
+              "response_variable": "None",
+              "process_batch": true,
+              "first_response": false,
+              "processing_threads": 2,
+              "driver": "org.postgresql.Driver",
+              "url": "jdbc:postgresql://db.aisha.internal:5432/resultados",
+              "username": "readonly_user",
+              "password": "S3cr3tPass!",
+              "select": "SELECT * FROM resultados WHERE procesado = false",
+              "update": "UPDATE resultados SET procesado = true",
+              "use_script": false,
+              "aggregate_results": false,
+              "cache_results": true,
+              "keep_connection_open": true,
+              "update_mode": 1,
+              "retry_count": 5,
+              "retry_interval": 15000,
+              "fetch_size": 2000,
+              "encoding": "UTF-8"
+            }
+          }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 200 OK (INCOMPLETE)
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "2b3c4d5e-6f7a-4b8c-9d0e-1f2a3b4c5d6e",
+            "status": "INCOMPLETE",
+            "json_data": {
+              "name": "Reporte-Pacientes-Full",
+              "source": [{"template_codigo": "database-reader", "properties": {"driver": "org.postgresql.Driver", "fetch_size": 2000}}]
+            },
+            "xml_generated": null
+          }
+
+docs: "Reference example: all 26 `MirthFieldDefinition` json_keys for `database-reader` (migration 0040) sent explicitly, so the frontend has a complete catalogue of every possible key/value shape in one place (no discovery endpoint exists yet - GET /plantillas/{id}/ returns xml_content but not field_definitions). Values shown are illustrative, not necessarily the defaults - e.g. `retry_count`/`fetch_size` deliberately differ from their default_value (3/1000) to show they're editable. `pollConnectorPropertiesAdvanced` (weekly schedule, inactive days, day-of-month, time range) is NOT in this list because it has no field definition - it always ships with the template's fixed literal defaults, out of scope of the UI reference matrix this connector was built from."

@@ -1,0 +1,78 @@
+info:
+  name: Create Template
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/plantillas/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "nombre": "Conector Source HL7",
+        "codigo": "source-hl7-tcp",
+        "tipo_componente": "SOURCE_CONNECTOR",
+        "xml_content": "<sourceConnector>...</sourceConnector>",
+        "version_mirth": "4.4.2"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 201 Created
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 201
+      statusText: Created
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "c4d5e6f7-a8b9-4c0d-9e1f-2a3b4c5d6e7f",
+            "nombre": "Conector Source HL7",
+            "codigo": "source-hl7-tcp",
+            "tipo_componente": "SOURCE_CONNECTOR",
+            "xml_content": "<sourceConnector>...</sourceConnector>",
+            "version_mirth": "4.4.2",
+            "activo": true,
+            "created_at": "2026-07-07T18:30:00Z",
+            "updated_at": null
+          }
+  - name: Error - 400 Bad Request
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "PLANTILLA.VALIDATION_ERROR",
+              "message": "Datos inválidos.",
+              "details": {
+                "tipo_componente": ["\"INVALID\" is not a valid choice."]
+              }
+            }
+          }
+
+docs: "tipo_componente accepts: CANAL_BASE, SOURCE_CONNECTOR, DESTINATION_CONNECTOR."

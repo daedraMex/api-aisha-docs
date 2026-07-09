@@ -1,0 +1,71 @@
+info:
+  name: Create Draft (DICOM Listener source, TLS AES + client cert)
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "DICOM-Ingest-Sede-Norte-TLS",
+        "description": "Canal de recepción DICOM con TLS para Sede Norte",
+        "initial_state": "STOPPED",
+        "source": [
+          {
+            "template_codigo": "dicom-listener",
+            "properties": {
+              "local_address": "0.0.0.0",
+              "local_port": 2762,
+              "application_entity": "AISHA_PACS_TLS",
+              "tls": "aes",
+              "client_authentication": false,
+              "key_store": "/etc/mirth/certs/dicom-listener.jks",
+              "key_store_password": "changeit",
+              "key_password": "changeit",
+              "trust_store": "/etc/mirth/certs/dicom-truststore.jks",
+              "trust_store_password": "changeit"
+            }
+          }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 200 OK (INCOMPLETE)
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "a3b4c5d6-e7f8-4a9b-0c1d-2e3f4a5b6c7d",
+            "status": "INCOMPLETE",
+            "json_data": {
+              "name": "DICOM-Ingest-Sede-Norte-TLS",
+              "description": "Canal de recepción DICOM con TLS para Sede Norte",
+              "initial_state": "STOPPED",
+              "source": [{"template_codigo": "dicom-listener", "properties": {"tls": "aes", "key_store": "/etc/mirth/certs/dicom-listener.jks"}}]
+            },
+            "xml_generated": null
+          }
+
+docs: "Demonstrates the 5 certificate/password fields (key_store, key_password, key_store_password, trust_store, trust_store_password) added on top of the base DICOM Listener mapping - only meaningful in Mirth's own UI when `tls` is `3des`/`aes`. NOTE: the pipeline does not (yet) enforce the TLS-conditional rule itself - it will accept these fields regardless of `tls`'s value; enforcing 'must be empty when tls=notls/without' is deferred to a separate feature (see engram topic ms-integration-engine/mirth-templates)."

@@ -1,0 +1,73 @@
+info:
+  name: List User Channels
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/channels/?is_favorite=true"
+  params:
+    - name: is_favorite
+      value: "true"
+      type: query
+      disabled: true
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 200 OK
+    request:
+      url: ""
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "page": 1,
+            "page_size": 20,
+            "total": 1,
+            "has_next": false,
+            "has_previous": false,
+            "data": [
+              {
+                "id": "d7e8f9a0-b1c2-4d3e-9f4a-5b6c7d8e9f0a",
+                "channel_name": "Mi canal de resultados",
+                "last_json_progress": { "step": 2 },
+                "status": "DRAFT",
+                "is_favorite": true
+              }
+            ]
+          }
+  - name: Error - 400 Bad Request (invalid is_favorite)
+    request:
+      url: ""
+      method: GET
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "CHANNEL.VALIDATION_ERROR",
+              "message": "Invalid is_favorite parameter. Use true or false.",
+              "details": null
+            }
+          }
+
+docs: Paginated list of the user's Mirth channel drafts/instances built through the wizard. `is_favorite` accepts true|false.

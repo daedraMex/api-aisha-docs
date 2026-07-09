@@ -1,0 +1,88 @@
+info:
+  name: Channel Messages
+  type: http
+  seq: 6
+
+http:
+  method: GET
+  url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/messages/?limit=20&offset=0"
+  params:
+    - name: limit
+      value: "20"
+      type: query
+    - name: offset
+      value: "0"
+      type: query
+    - name: status
+      value: ERROR
+      type: query
+      disabled: true
+    - name: start_date
+      value: 2026-01-01T00:00:00Z
+      type: query
+      disabled: true
+    - name: end_date
+      value: 2026-12-31T23:59:59Z
+      type: query
+      disabled: true
+    - name: meta_data_search
+      value: "12345"
+      type: query
+      disabled: true
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 200 OK
+    request:
+      url: ""
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "total": 1,
+            "pages": 1,
+            "limit": 20,
+            "offset": 0,
+            "data": [
+              {
+                "message_id": 482913,
+                "channel_id": "07fc0b36-e4f9-4923-abed-f3bb4b9c1082",
+                "status": "SENT",
+                "received_date": "2026-07-07T12:00:00Z",
+                "send_date": "2026-07-07T12:00:01Z",
+                "response_date": "2026-07-07T12:00:02Z",
+                "metadata": { "PATIENT_ID": "P-0001" }
+              }
+            ]
+          }
+  - name: Error - 400 Bad Request (invalid status)
+    request:
+      url: ""
+      method: GET
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "detail": "Invalid status value. Must be one of: ERROR, SENT, QUEUED, FILTERED."
+          }
+
+docs: Paginated messages for a channel. `status` accepts ERROR|SENT|QUEUED|FILTERED; `start_date`/`end_date` must be ISO 8601 with timezone.

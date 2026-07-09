@@ -1,0 +1,7 @@
+info:
+  name: Mirth Channels
+  type: folder
+  seq: 2
+
+request:
+  auth: inherit

@@ -1,0 +1,90 @@
+info:
+  name: System Health (Mirth deep check)
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{base_url}}/api/v1/integration-engine/system-health/"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 200 OK
+    request:
+      url: ""
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "ts": "2026-07-07T18:30:00Z",
+            "host": "mirth-vpn.aisha.internal",
+            "pacs_tcp": {
+              "ok": true,
+              "host": "10.0.4.12",
+              "port": 104,
+              "timeout_ms": 2000,
+              "rtt_ms": 18,
+              "error": null
+            },
+            "problems": {
+              "pacs_down": [],
+              "channels_not_started": [],
+              "queues_high": []
+            },
+            "stats": [
+              {
+                "channel_id": "07fc0b36-e4f9-4923-abed-f3bb4b9c1082",
+                "channel_name": "HL7-Ingest-Sede-Norte",
+                "received": 1204,
+                "sent": 1198,
+                "errored": 6,
+                "queued": 0,
+                "error_rate_pct": 0.5,
+                "processed_per_min": 42.3,
+                "backlog_minutes": 0,
+                "queue_level": "OK"
+              }
+            ],
+            "jvm": {
+              "memory": { "max_mb": 4096, "total_mb": 2048, "used_mb": 1122, "free_mb": 926 },
+              "threads": { "current": 84, "peak": 110, "daemon": 40 }
+            },
+            "jvm_health": "OK",
+            "ok": true,
+            "degraded": false
+          }
+  - name: Error - 503 Service Unavailable (Mirth down)
+    request:
+      url: ""
+      method: GET
+    response:
+      status: 503
+      statusText: Service Unavailable
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "MIRTH.UNAVAILABLE",
+              "message": "Could not reach Mirth Connect through the VPN.",
+              "details": null
+            }
+          }
+
+docs: "Deep health check against Mirth: PACS TCP reachability, per-channel queue/error stats and JVM memory/thread stats."

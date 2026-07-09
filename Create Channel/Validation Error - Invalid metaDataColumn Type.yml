@@ -1,0 +1,52 @@
+info:
+  name: Validation Error - Invalid metaDataColumn Type
+  type: http
+  seq: 7
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "HL7-Ingest-Sede-Norte",
+        "metaDataColumn": [
+          { "name": "PATIENT_ID", "type": "NOT_A_TYPE" }
+        ],
+        "source": [
+          { "template_codigo": "channel-reader", "properties": {} }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Error - 400 Bad Request
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "metaDataColumn": [
+              { "type": ["\"NOT_A_TYPE\" is not a valid choice."] }
+            ]
+          }
+
+docs: "`metaDataColumn[].type` must be STRING, NUMBER, BOOLEAN or TIMESTAMP - anything else is a fail-fast 400 before the pipeline runs."

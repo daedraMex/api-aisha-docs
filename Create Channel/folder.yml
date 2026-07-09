@@ -1,0 +1,11 @@
+info:
+  name: Create Channel
+  type: folder
+  seq: 7
+
+request:
+  auth: inherit
+
+docs:
+  content: "Staged, resumable Mirth channel builder (sdd/create-channel). Real templates seeded so far: base channel (`canal-base`), the 'Channel Reader' source connector (`channel-reader`, migration 0038), the 'DICOM Listener' source connector (`dicom-listener`, migration 0039 - includes the TLS certificate fields key_store/key_password/key_store_password/trust_store/trust_store_password) and the 'Database Reader' source connector (`database-reader`, migration 0040 - accepts either pure SQL or Mirth JavaScript for its `select`/`update` scripts, gated by `use_script`). Requests are grouped below by source connector. Destination connector templates are NOT seeded yet (deferred to a future PR), so any payload with a `destinations` entry will 404 with CHANNEL.TEMPLATE_NOT_FOUND until a real one is added."
+  type: text/markdown

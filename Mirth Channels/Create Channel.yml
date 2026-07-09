@@ -1,0 +1,68 @@
+info:
+  name: Create Channel
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/channels/create/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "HL7-Ingest-Sede-Sur",
+        "description": "Canal de ingesta HL7 para Sede Sur",
+        "initialState": "STOPPED",
+        "metadataDay": 30,
+        "contentDay": 7,
+        "enable": false
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 201 Created
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 201
+      statusText: Created
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "9b1e4f2a-3c5d-4e6f-8a9b-0c1d2e3f4a5b"
+          }
+  - name: Error - 400 Bad Request
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "errors": {
+              "name": ["This field is required."],
+              "initialState": ["\"INVALID\" is not a valid choice."]
+            }
+          }
+
+docs: Renders the active canal-base template and deploys a new channel in Mirth.

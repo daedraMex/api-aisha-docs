@@ -1,0 +1,59 @@
+info:
+  name: Update Template
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: "{{base_url}}/api/v1/integration-engine/plantillas/{{template_id}}/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "nombre": "Canal Base Pruning v2",
+        "xml_content": "<channel>...updated...</channel>"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 204 No Content
+    request:
+      url: ""
+      method: PUT
+    response:
+      status: 204
+      statusText: No Content
+      body:
+        type: text
+        data: ""
+  - name: Error - 404 Not Found
+    request:
+      url: ""
+      method: PUT
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "PLANTILLA.NOT_FOUND",
+              "message": "No existe una plantilla con el ID proporcionado.",
+              "details": null
+            }
+          }
+
+docs: Only `nombre` and `xml_content` are updatable; both required.

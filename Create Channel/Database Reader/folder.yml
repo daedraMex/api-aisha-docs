@@ -1,0 +1,7 @@
+info:
+  name: Database Reader
+  type: folder
+  seq: 3
+
+request:
+  auth: inherit

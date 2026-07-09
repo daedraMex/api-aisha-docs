@@ -1,0 +1,70 @@
+info:
+  name: Create User Channel
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/channels/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "template_base_id": "a1b2c3d4-e5f6-4789-9abc-def012345678",
+        "channel_name": "Mi canal de resultados",
+        "last_json_progress": { "step": 1 }
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 201 Created
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 201
+      statusText: Created
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "d7e8f9a0-b1c2-4d3e-9f4a-5b6c7d8e9f0a",
+            "channel_name": "Mi canal de resultados",
+            "last_json_progress": { "step": 1 },
+            "status": "DRAFT",
+            "is_favorite": false
+          }
+  - name: Error - 404 Not Found (template)
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "CHANNEL.TEMPLATE_NOT_FOUND",
+              "message": "El template base indicado no existe.",
+              "details": null
+            }
+          }
+
+docs: Creates a new draft channel instance from a base template.

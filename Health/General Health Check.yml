@@ -1,0 +1,59 @@
+info:
+  name: General Health Check
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{base_url}}/api/v1/integration-engine/health/"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 200 OK (operational)
+    request:
+      url: ""
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "microservice": "ms-integration-engine",
+            "status": "operational",
+            "architecture": "Hexagonal/DDD",
+            "mirth": {
+              "ok": true,
+              "response_time_ms": 42
+            }
+          }
+  - name: Degraded - 200 OK (Mirth unreachable)
+    request:
+      url: ""
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "microservice": "ms-integration-engine",
+            "status": "degraded",
+            "architecture": "Hexagonal/DDD"
+          }
+
+docs: Service-level health check. Always returns 200; `status` reflects operational vs degraded state. `mirth` key is present only if the downstream Mirth check succeeded.

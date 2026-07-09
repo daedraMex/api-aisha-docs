@@ -1,0 +1,45 @@
+info:
+  name: Channel Action (start/stop/deploy/undeploy)
+  type: http
+  seq: 9
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/start/"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 204 No Content
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 204
+      statusText: No Content
+      body:
+        type: text
+        data: ""
+  - name: Error - 400 Bad Request (invalid action)
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "detail": "Action 'pause' is not allowed. Valid actions: [start, stop, deploy, undeploy]"
+          }
+
+docs: "The last path segment is the action and must be one of: start, stop, deploy, undeploy. No request body."

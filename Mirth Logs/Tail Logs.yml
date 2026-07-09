@@ -1,0 +1,71 @@
+info:
+  name: Tail Logs
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{base_url}}/api/v1/integration-engine/logs/?lines=100&max_kb=512"
+  params:
+    - name: lines
+      value: "100"
+      type: query
+    - name: max_kb
+      value: "512"
+      type: query
+    - name: since
+      value: 2026-07-07T00:00:00Z
+      type: query
+      disabled: true
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 200 OK
+    request:
+      url: ""
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "file": "mirth.log",
+            "lines_requested": 100,
+            "max_kb": 512,
+            "tail_lines": [
+              { "level": "INFO", "ts": "2026-07-07T18:29:55Z", "thread": "http-nio-8443-exec-3", "msg": "Channel HL7-Ingest-Sede-Norte started." }
+            ]
+          }
+  - name: Error - 503 Service Unavailable
+    request:
+      url: ""
+      method: GET
+    response:
+      status: 503
+      statusText: Service Unavailable
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "MIRTH.UNAVAILABLE",
+              "message": "Could not reach Mirth Connect through the VPN.",
+              "details": null
+            }
+          }
+
+docs: Tails the Mirth log file, capped by lines and max_kb.

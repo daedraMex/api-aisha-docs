@@ -1,0 +1,58 @@
+info:
+  name: List Templates
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{base_url}}/api/v1/integration-engine/plantillas/"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 200 OK
+    request:
+      url: ""
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          [
+            {
+              "id": "a1b2c3d4-e5f6-4789-9abc-def012345678",
+              "nombre": "Canal Base Pruning",
+              "codigo": "canal-base-pruning",
+              "tipo_componente": "CANAL_BASE",
+              "xml_content": "<channel>...</channel>",
+              "version_mirth": "4.4.2",
+              "activo": true,
+              "created_at": "2026-05-01T10:00:00Z",
+              "updated_at": null
+            }
+          ]
+  - name: Success - 200 OK (empty)
+    request:
+      url: ""
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: "[]"
+
+docs: Lists all XML component templates used to build channels.

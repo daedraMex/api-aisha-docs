@@ -1,0 +1,68 @@
+info:
+  name: Channel Statistics
+  type: http
+  seq: 3
+
+http:
+  method: GET
+  url: "{{base_url}}/api/v1/integration-engine/channels/statistics/"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 200 OK
+    request:
+      url: ""
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "total": 1,
+            "data": [
+              {
+                "channel_id": "07fc0b36-e4f9-4923-abed-f3bb4b9c1082",
+                "name": "HL7-Ingest-Sede-Norte",
+                "status": "STARTED",
+                "received": 1204,
+                "sent": 1198,
+                "error": 6,
+                "filtered": 0,
+                "queued": 0,
+                "total_messages": 1204
+              }
+            ]
+          }
+  - name: Error - 503 Service Unavailable
+    request:
+      url: ""
+      method: GET
+    response:
+      status: 503
+      statusText: Service Unavailable
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "MIRTH.UNAVAILABLE",
+              "message": "Could not reach Mirth Connect through the VPN.",
+              "details": null
+            }
+          }
+
+docs: Message counters per channel. Cached 10s.

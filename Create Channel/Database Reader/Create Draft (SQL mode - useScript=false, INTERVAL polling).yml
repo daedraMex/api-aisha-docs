@@ -1,0 +1,73 @@
+info:
+  name: Create Draft (SQL mode - useScript=false, INTERVAL polling)
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Reporte-Pacientes-SQL",
+        "description": "Canal que lee resultados de laboratorio directo de la base via SQL puro",
+        "initial_state": "STARTED",
+        "metaDataColumn": [
+          { "name": "PATIENT_ID", "type": "STRING", "mappingName": "mirth_patient_id" }
+        ],
+        "source": [
+          {
+            "template_codigo": "database-reader",
+            "properties": {
+              "driver": "com.mysql.cj.jdbc.Driver",
+              "url": "jdbc:mysql://db.aisha.internal:3306/resultados",
+              "username": "readonly_user",
+              "password": "S3cr3tPass!",
+              "use_script": false,
+              "select": "SELECT * FROM resultados WHERE procesado = 0",
+              "update": "UPDATE resultados SET procesado = 1 WHERE id = ?",
+              "update_mode": 1
+            }
+          }
+        ],
+        "prune_metadata_days": 30,
+        "prune_content_days": 60,
+        "archive_enabled": true
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 200 OK (INCOMPLETE)
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "9c0d1e2f-3a4b-4c5d-8e6f-7a8b9c0d1e2f",
+            "status": "INCOMPLETE",
+            "json_data": {
+              "name": "Reporte-Pacientes-SQL",
+              "source": [{"template_codigo": "database-reader", "properties": {"driver": "com.mysql.cj.jdbc.Driver", "use_script": false}}]
+            },
+            "xml_generated": null
+          }
+
+docs: "`template_codigo='database-reader'` (migration 0040). `use_script=false` -> `select`/`update` must be plain SQL ANSI (validated server-side per the useScript dependency rule), not JavaScript. `polling_type`/`polling_frequency`/`poll_on_start`/`queue_buffer_size`/`processing_threads`/`cache_results`/`keep_connection_open`/`retry_count`/`retry_interval`/`fetch_size`/`encoding` are intentionally omitted from `properties` to demonstrate their `MirthFieldDefinition.default_value` auto-filling: polling_type=INTERVAL, polling_frequency=5000, poll_on_start=false, queue_buffer_size=1000, processing_threads=1, cache_results=true, keep_connection_open=true, retry_count=3, retry_interval=10000, fetch_size=1000, encoding=DEFAULT_ENCODING."

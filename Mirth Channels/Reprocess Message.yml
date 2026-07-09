@@ -1,0 +1,45 @@
+info:
+  name: Reprocess Message
+  type: http
+  seq: 8
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/messages/{{message_id}}/reprocess/"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 204 No Content
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 204
+      statusText: No Content
+      body:
+        type: text
+        data: ""
+  - name: Error - 404 Not Found
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "detail": "The specified message does not exist for this channel."
+          }
+
+docs: Reprocesses a single message through the channel. No request body.

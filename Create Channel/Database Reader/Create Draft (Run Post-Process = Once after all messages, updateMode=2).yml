@@ -1,0 +1,67 @@
+info:
+  name: Create Draft (Run Post-Process = Once after all messages, updateMode=2)
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Reporte-Pacientes-PostProcesoUnico",
+        "description": "Demuestra Run Post-Process = Once after all messages (updateMode=2)",
+        "initial_state": "STARTED",
+        "source": [
+          {
+            "template_codigo": "database-reader",
+            "properties": {
+              "driver": "com.mysql.cj.jdbc.Driver",
+              "url": "jdbc:mysql://db.aisha.internal:3306/resultados",
+              "username": "readonly_user",
+              "password": "S3cr3tPass!",
+              "use_script": true,
+              "select": "var dbConn; try { dbConn = DatabaseConnectionFactory.createDatabaseConnection('com.mysql.cj.jdbc.Driver','jdbc:mysql://db.aisha.internal:3306/resultados','readonly_user','S3cr3tPass!'); return result; } finally { if (dbConn) { dbConn.close(); } }",
+              "update": "var dbConn; try { dbConn = DatabaseConnectionFactory.createDatabaseConnection('com.mysql.cj.jdbc.Driver','jdbc:mysql://db.aisha.internal:3306/resultados','readonly_user','S3cr3tPass!'); } finally { if (dbConn) { dbConn.close(); } }",
+              "update_mode": 2
+            }
+          }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 200 OK (INCOMPLETE)
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "3c4d5e6f-7a8b-4c9d-0e1f-2a3b4c5d6e7f",
+            "status": "INCOMPLETE",
+            "json_data": {
+              "name": "Reporte-Pacientes-PostProcesoUnico",
+              "source": [{"template_codigo": "database-reader", "properties": {"use_script": true, "update_mode": 2}}]
+            },
+            "xml_generated": null
+          }
+
+docs: "`update_mode` maps 0=Never, 1=After each message, 2=Once after all messages. This example intentionally sends a SINGLE copy of the `update` script for updateMode=2 - the real Mirth export files audited for this connector (js advanced.xml, pollinsettings/{default,2,3,4,5}.xml) all had this script duplicated verbatim (same try/finally block pasted twice), which was confirmed to be a copy-paste artifact in those test exports, not real Mirth behavior. Do not reproduce that duplication here."

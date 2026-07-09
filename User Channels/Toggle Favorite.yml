@@ -1,0 +1,59 @@
+info:
+  name: Toggle Favorite
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/channels/{{channel_id}}/favorite/"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 200 OK
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "d7e8f9a0-b1c2-4d3e-9f4a-5b6c7d8e9f0a",
+            "channel_name": "Mi canal de resultados",
+            "last_json_progress": { "step": 2 },
+            "status": "DRAFT",
+            "is_favorite": true
+          }
+  - name: Error - 404 Not Found
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "CHANNEL.NOT_FOUND",
+              "message": "El canal indicado no existe para este usuario.",
+              "details": null
+            }
+          }
+
+docs: Toggles is_favorite on each call. No request body. Max 5 favorites per user (409 past the limit).

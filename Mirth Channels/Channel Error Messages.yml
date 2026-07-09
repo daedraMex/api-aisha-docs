@@ -1,0 +1,74 @@
+info:
+  name: Channel Error Messages
+  type: http
+  seq: 7
+
+http:
+  method: GET
+  url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/messages/errors/?limit=20&offset=0"
+  params:
+    - name: limit
+      value: "20"
+      type: query
+    - name: offset
+      value: "0"
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 200 OK
+    request:
+      url: ""
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "total": 1,
+            "pages": 1,
+            "limit": 20,
+            "offset": 0,
+            "data": [
+              {
+                "message_id": 482914,
+                "channel_id": "07fc0b36-e4f9-4923-abed-f3bb4b9c1082",
+                "channel_name": "HL7-Ingest-Sede-Norte",
+                "status": "ERROR",
+                "error_code": 500,
+                "received_date": "2026-07-07T12:05:00Z",
+                "response_date": "2026-07-07T12:05:01Z",
+                "error_type": "DESTINATION_TRANSPORT",
+                "message_preview": "Connection refused: connect"
+              }
+            ]
+          }
+  - name: Error - 404 Not Found
+    request:
+      url: ""
+      method: GET
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "detail": "The specified channel does not exist in Mirth."
+          }
+
+docs: Error messages for a channel with error type and stack trace preview.

@@ -1,0 +1,63 @@
+info:
+  name: Get SMTP Destination
+  type: http
+  seq: 3
+
+http:
+  method: GET
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/smtp-destinations/{{destination_id}}/"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 200 OK
+    request:
+      url: ""
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "c7d8e9f0-1a2b-4c3d-8e9f-0a1b2c3d4e5f",
+            "user_id": "3f2e9b1a-6c4d-4a2f-9e21-7d8b5c1a9f30",
+            "name": "Alertas de Errores Criticos",
+            "smtp_host": "smtp.gmail.com",
+            "smtp_port": 587,
+            "requires_authentication": true,
+            "smtp_username": "alerts@aisha-health.com",
+            "smtp_password": "SuperSecret123!",
+            "recipients": ["ops-team@aisha-health.com", "oncall@aisha-health.com"],
+            "sender_email": "no-reply@aisha-health.com",
+            "subject": "[ALERTA] Fallo critico en integracion"
+          }
+  - name: Error - 404 Not Found
+    request:
+      url: ""
+      method: GET
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "SMTP_DESTINATION.NOT_FOUND",
+              "message": "SMTP destination not found.",
+              "details": null
+            }
+          }
