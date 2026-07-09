@@ -1,0 +1,4 @@
+name: pre
+variables:
+  - name: base_url
+    value: https://zbdr1f674l.execute-api.us-east-1.amazonaws.com/dev/

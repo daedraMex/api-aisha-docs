@@ -1,0 +1,4 @@
+name: ngrok
+variables:
+  - name: base_url
+    value: https://cheesy-booting-subheader.ngrok-free.dev
