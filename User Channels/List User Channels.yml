@@ -5,7 +5,7 @@ info:
 
 http:
   method: GET
-  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/channels/?is_favorite=true"
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/channels/"
   params:
     - name: is_favorite
       value: "true"
@@ -22,8 +22,13 @@ settings:
 examples:
   - name: Success - 200 OK
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/channels/"
       method: GET
+      params:
+        - name: is_favorite
+          value: "true"
+          type: query
+          disabled: true
     response:
       status: 200
       statusText: OK
@@ -36,22 +41,72 @@ examples:
           {
             "page": 1,
             "page_size": 20,
-            "total": 1,
+            "total": 2,
             "has_next": false,
             "has_previous": false,
             "data": [
               {
-                "id": "d7e8f9a0-b1c2-4d3e-9f4a-5b6c7d8e9f0a",
-                "channel_name": "Mi canal de resultados",
-                "last_json_progress": { "step": 2 },
-                "status": "DRAFT",
-                "is_favorite": true
+                "id": "209ff7dd-27fe-483b-a322-a571c873f1bb",
+                "channel_name": "DICOM-Ingest-Sede-Norte",
+                "last_json_progress": {
+                  "name": "DICOM-Ingest-Sede-Norte",
+                  "source": {
+                    "properties": {
+                      "local_port": 104,
+                      "local_address": "0.0.0.0",
+                      "response_variable": "None",
+                      "application_entity": "AISHA_PACS",
+                      "respond_after_processing": true
+                    },
+                    "template_codigo": "dicom-listener"
+                  },
+                  "description": "Canal de recepción DICOM para Sede Norte",
+                  "destinations": [],
+                  "initial_state": "STARTED",
+                  "metadata_columns": [
+                    {
+                      "name": "STUDY_UID",
+                      "type": "STRING",
+                      "mappingName": "study_instance_uid"
+                    }
+                  ]
+                },
+                "status": "INCOMPLETE",
+                "is_favorite": false
+              },
+              {
+                "id": "ac0416c6-17f7-4fff-87db-52938724e7d0",
+                "channel_name": "HL7-Ingest-Sede-Norte",
+                "last_json_progress": {
+                  "name": "HL7-Ingest-Sede-Norte",
+                  "source": {
+                    "properties": {
+                      "process_batch": false,
+                      "first_response": false,
+                      "response_variable": "None",
+                      "respond_after_processing": true
+                    },
+                    "template_codigo": "channel-reader"
+                  },
+                  "description": "Canal de ingesta HL7 para Sede Norte",
+                  "destinations": [],
+                  "initial_state": "STARTED",
+                  "metadata_columns": [
+                    {
+                      "name": "PATIENT_ID",
+                      "type": "STRING",
+                      "mappingName": "mirth_patient_id"
+                    }
+                  ]
+                },
+                "status": "INCOMPLETE",
+                "is_favorite": false
               }
             ]
           }
   - name: Error - 400 Bad Request (invalid is_favorite)
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/channels/"
       method: GET
     response:
       status: 400

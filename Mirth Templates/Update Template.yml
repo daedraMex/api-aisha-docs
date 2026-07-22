@@ -13,7 +13,7 @@ http:
     type: json
     data: |-
       {
-        "nombre": "Canal Base Pruning v2",
+        "nombre": "Canal Base Pruning v3",
         "xml_content": "<channel>...updated...</channel>"
       }
   auth: inherit
@@ -27,7 +27,7 @@ settings:
 examples:
   - name: Success - 204 No Content
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/plantillas/{{template_id}}/"
       method: PUT
     response:
       status: 204
@@ -37,7 +37,7 @@ examples:
         data: ""
   - name: Error - 404 Not Found
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/plantillas/{{template_id}}/"
       method: PUT
     response:
       status: 404

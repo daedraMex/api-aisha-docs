@@ -49,8 +49,37 @@ settings:
 examples:
   - name: Success - 200 OK (INCOMPLETE)
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
       method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "Reporte-Pacientes-SQL",
+            "description": "Canal que lee resultados de laboratorio directo de la base via SQL puro",
+            "initial_state": "STARTED",
+            "metaDataColumn": [
+              { "name": "PATIENT_ID", "type": "STRING", "mappingName": "mirth_patient_id" }
+            ],
+            "source": [
+              {
+                "template_codigo": "database-reader",
+                "properties": {
+                  "driver": "com.mysql.cj.jdbc.Driver",
+                  "url": "jdbc:mysql://db.aisha.internal:3306/resultados",
+                  "username": "readonly_user",
+                  "password": "S3cr3tPass!",
+                  "use_script": false,
+                  "select": "SELECT * FROM resultados WHERE procesado = 0",
+                  "update": "UPDATE resultados SET procesado = 1 WHERE id = ?",
+                  "update_mode": 1
+                }
+              }
+            ],
+            "prune_metadata_days": 30,
+            "prune_content_days": 60,
+            "archive_enabled": true
+          }
     response:
       status: 200
       statusText: OK

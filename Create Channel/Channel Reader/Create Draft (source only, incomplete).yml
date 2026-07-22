@@ -13,11 +13,15 @@ http:
     type: json
     data: |-
       {
-        "name": "HL7-Ingest-Sede-Norte",
+        "name": "HL6-Ingest-Sede-Norte",
         "description": "Canal de ingesta HL7 para Sede Norte",
         "initial_state": "STARTED",
         "metaDataColumn": [
-          { "name": "PATIENT_ID", "type": "STRING", "mappingName": "mirth_patient_id" }
+          {
+            "name": "PATIENT_ID",
+            "type": "STRING",
+            "mappingName": "mirth_patient_id"
+          }
         ],
         "source": [
           {
@@ -45,8 +49,37 @@ settings:
 examples:
   - name: Success - 200 OK (INCOMPLETE)
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
       method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "HL6-Ingest-Sede-Norte",
+            "description": "Canal de ingesta HL7 para Sede Norte",
+            "initial_state": "STARTED",
+            "metaDataColumn": [
+              {
+                "name": "PATIENT_ID",
+                "type": "STRING",
+                "mappingName": "mirth_patient_id"
+              }
+            ],
+            "source": [
+              {
+                "template_codigo": "channel-reader",
+                "properties": {
+                  "respond_after_processing": true,
+                  "response_variable": "None",
+                  "process_batch": false,
+                  "first_response": false
+                }
+              }
+            ],
+            "prune_metadata_days": 30,
+            "prune_content_days": 60,
+            "archive_enabled": true
+          }
     response:
       status: 200
       statusText: OK

@@ -1,0 +1,73 @@
+info:
+  name: "Create Draft - File Reader (Polling: Interval + Source Settings)"
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "HL7-Ingest-Polling-Interval",
+        "description": "Canal de ingesta HL7 con polling por intervalo y ajustes de Source Settings explicitos",
+        "initial_state": "STARTED",
+        "source": [
+          {
+            "template_codigo": "file-reader",
+            "properties": {
+              "scheme": "FILE",
+              "directory": "/home/docs",
+              "afterProcessingAction": "NONE",
+              "errorReadingAction": "NONE",
+              "charsetEncoding": "DEFAULT_ENCODING",
+              "polling_type": "INTERVAL",
+              "poll_on_start": false,
+              "polling_frequency": 5000,
+              "response_variable": "None",
+              "respond_after_processing": true,
+              "process_batch": false,
+              "first_response": false,
+              "processing_threads": 1,
+              "queue_buffer_size": 1000
+            }
+          }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 200 OK (INCOMPLETE)
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "e1f2a3b4-c5d6-4e7f-8a9b-0c1d2e3f4a5b",
+            "status": "INCOMPLETE",
+            "json_data": {
+              "name": "HL7-Ingest-Polling-Interval",
+              "source": [{"template_codigo": "file-reader", "properties": {"scheme": "FILE", "polling_type": "INTERVAL", "polling_frequency": 5000}}]
+            },
+            "xml_generated": null
+          }
+
+docs: "Polling Settings (Schedule Type = Interval): `polling_type: \"INTERVAL\"` activates `polling_frequency` (ms between polls) - `polling_hour`/`polling_minute` are irrelevant in this mode and can be omitted, same as they're omitted here. Source Settings block (`response_variable`/`respond_after_processing`/`process_batch`/`first_response`/`processing_threads`/`queue_buffer_size`) is shared across every File Reader scheme and bound via the generic field-definition binder (`aisha_core` migration 0041), NOT `bind_file_reader_source` - shown here fully explicit, but every one of these has a real-world-observed default (see migration 0041's FIELD_DEFINITIONS) and can be omitted entirely, same as the other scheme examples above do. No `destinations` yet -> INCOMPLETE (200)."

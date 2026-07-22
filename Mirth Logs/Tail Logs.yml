@@ -5,14 +5,8 @@ info:
 
 http:
   method: GET
-  url: "{{base_url}}/api/v1/integration-engine/logs/?lines=100&max_kb=512"
+  url: "{{base_url}}/api/v1/integration-engine/logs/"
   params:
-    - name: lines
-      value: "100"
-      type: query
-    - name: max_kb
-      value: "512"
-      type: query
     - name: since
       value: 2026-07-07T00:00:00Z
       type: query
@@ -28,8 +22,17 @@ settings:
 examples:
   - name: Success - 200 OK
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/logs/"
       method: GET
+      params:
+        - name: lines
+          value: "100"
+          type: query
+          disabled: true
+        - name: max_kb
+          value: "512"
+          type: query
+          disabled: true
     response:
       status: 200
       statusText: OK
@@ -40,16 +43,609 @@ examples:
         type: json
         data: |-
           {
-            "file": "mirth.log",
+            "file": "/usr/bin/Mirth Connect/logs/mirth.log",
             "lines_requested": 100,
             "max_kb": 512,
             "tail_lines": [
-              { "level": "INFO", "ts": "2026-07-07T18:29:55Z", "thread": "http-nio-8443-exec-3", "msg": "Channel HL7-Ingest-Sede-Norte started." }
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:19:44.849",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: rt.namegetLogs"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:19:44.849",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/logs]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:19:41.102",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-27",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11843,\"sent\":11843,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202735,\"sent\":202735,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:19:30.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-29",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:19:30.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-29",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:19:25.617",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-27",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11843,\"sent\":11843,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202734,\"sent\":202734,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:19:15.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-29",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:19:15.004",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-29",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:19:10.767",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-27",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11843,\"sent\":11843,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202733,\"sent\":202733,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:19:00.006",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-29",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:19:00.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-29",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:19:00.000",
+                "thread": "JavaScript Reader JavaScript Task on MONITOR_CANAL (2fe95f45-a9ec-400c-a0f0-f621d8ae438e) < pool-1-thread-18",
+                "msg": "js-connector: ALERT MONITOR"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:18:55.522",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-18",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11843,\"sent\":11843,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202732,\"sent\":202732,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:18:45.004",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:18:45.004",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:18:40.581",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-18",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11843,\"sent\":11843,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202731,\"sent\":202731,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:18:30.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:18:30.004",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:18:25.548",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-18",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11843,\"sent\":11843,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202730,\"sent\":202730,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:18:15.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:18:15.004",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:18:10.842",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-18",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11843,\"sent\":11843,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202729,\"sent\":202729,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:18:00.025",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:18:00.024",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:18:00.001",
+                "thread": "JavaScript Reader JavaScript Task on MONITOR_CANAL (2fe95f45-a9ec-400c-a0f0-f621d8ae438e) < pool-1-thread-29",
+                "msg": "js-connector: ALERT MONITOR"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:17:55.638",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-29",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11842,\"sent\":11842,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202728,\"sent\":202728,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:17:45.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-18",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:17:45.004",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-18",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:17:41.135",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-29",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11842,\"sent\":11842,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202727,\"sent\":202727,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:17:30.013",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-18",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:17:30.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-18",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:17:25.561",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-29",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11842,\"sent\":11842,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202726,\"sent\":202726,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:17:15.016",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-18",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:17:15.016",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-18",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:17:10.859",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-29",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11842,\"sent\":11842,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202725,\"sent\":202725,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:17:00.006",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-18",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:17:00.006",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-18",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:17:00.001",
+                "thread": "JavaScript Reader JavaScript Task on MONITOR_CANAL (2fe95f45-a9ec-400c-a0f0-f621d8ae438e) < pool-1-thread-27",
+                "msg": "js-connector: ALERT MONITOR"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:55.534",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-27",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11841,\"sent\":11841,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202724,\"sent\":202724,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:45.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-29",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:45.004",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-29",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:43.214",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-27",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11841,\"sent\":11841,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202723,\"sent\":202723,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:32.706",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-29",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:32.705",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-29",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:32.674",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-27",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11841,\"sent\":11841,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202722,\"sent\":202722,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:25.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-29",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:25.004",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-29",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:23.204",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-27",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11841,\"sent\":11841,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202721,\"sent\":202721,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:20.004",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-29",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:20.004",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-29",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:17.080",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-27",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11841,\"sent\":11841,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202720,\"sent\":202720,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:15.004",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-29",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:15.003",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-29",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:12.081",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-27",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11841,\"sent\":11841,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202719,\"sent\":202719,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:10.007",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-29",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:10.006",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-29",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:07.077",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-27",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11841,\"sent\":11841,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202718,\"sent\":202718,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:05.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-29",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:05.004",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-29",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:02.079",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-29",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11840,\"sent\":11840,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202717,\"sent\":202717,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:00.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-18",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:00.004",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-18",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:16:00.001",
+                "thread": "JavaScript Reader JavaScript Task on MONITOR_CANAL (2fe95f45-a9ec-400c-a0f0-f621d8ae438e) < pool-1-thread-27",
+                "msg": "js-connector: ALERT MONITOR"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:57.076",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-29",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11840,\"sent\":11840,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202716,\"sent\":202716,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:55.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:55.004",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:52.077",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-29",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11840,\"sent\":11840,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202715,\"sent\":202715,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:50.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:50.004",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:47.078",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-29",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11840,\"sent\":11840,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202714,\"sent\":202714,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:45.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:45.004",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:42.076",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-29",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11840,\"sent\":11840,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202713,\"sent\":202713,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:40.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:40.004",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:37.076",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-29",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11840,\"sent\":11840,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202712,\"sent\":202712,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:35.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:35.004",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:32.080",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-29",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11840,\"sent\":11840,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202711,\"sent\":202711,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:30.004",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:30.004",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:27.073",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-29",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11840,\"sent\":11840,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202710,\"sent\":202710,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:25.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:25.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:22.081",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-29",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11840,\"sent\":11840,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202709,\"sent\":202709,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:20.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:20.004",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:17.079",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-29",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11840,\"sent\":11840,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202708,\"sent\":202708,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:15.006",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:15.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:12.093",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-29",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11840,\"sent\":11840,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202707,\"sent\":202707,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:10.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:10.004",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:08.752",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-29",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11840,\"sent\":11840,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202706,\"sent\":202706,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:05.014",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: rt.namechannelStatistics"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:05.013",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-27",
+                "msg": "transformer: DEBUG HTTP -> method=GET path=[/v1/channels/statistics]"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:00.580",
+                "thread": "JavaScript Writer JavaScript Task on JOB_DAILY_CHANNEL_STATISTICS (394a9988-3b45-4ce7-8e3b-acc7fada154b), Destination 1 (1) < pool-1-thread-27",
+                "msg": "js-connector: {\"ok\":true,\"data\":{\"statistics\":[{\"channelId\":\"f934fe1d-3fca-491b-8254-a341ff039a6a\",\"name\":\"demo 226\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b\",\"name\":\"worklist-hl7-listener\",\"status\":\"STARTED\",\"received\":20,\"sent\":20,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"2fe95f45-a9ec-400c-a0f0-f621d8ae438e\",\"name\":\"MONITOR_CANAL\",\"status\":\"STARTED\",\"received\":11840,\"sent\":11840,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"53c430a6-2bce-4d38-8076-6768e9a78c43\",\"name\":\"API_WORKLIST_v2\",\"status\":\"STARTED\",\"received\":27,\"sent\":23,\"error\":20,\"filtered\":79,\"queued\":0},{\"channelId\":\"5f9adc69-5da5-456c-967d-69c30e7ae32f\",\"name\":\"keycloak\",\"status\":\"STARTED\",\"received\":4,\"sent\":3,\"error\":1,\"filtered\":0,\"queued\":0},{\"channelId\":\"394a9988-3b45-4ce7-8e3b-acc7fada154b\",\"name\":\"JOB_DAILY_CHANNEL_STATISTICS\",\"status\":\"STARTED\",\"received\":202705,\"sent\":202705,\"error\":0,\"filtered\":0,\"queued\":0},{\"channelId\":\"4c88aebb-5bad-4f81-9d76-0e9d5e3719e1\",\"name\":\"este es un  nuevo canal\",\"status\":\"STARTED\",\"received\":0,\"sent\":0,\"error\":0,\"filtered\":0,\"queued\":0}]}}"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:15:00.015",
+                "thread": "JavaScript Reader JavaScript Task on MONITOR_CANAL (2fe95f45-a9ec-400c-a0f0-f621d8ae438e) < pool-1-thread-29",
+                "msg": "js-connector: ALERT MONITOR"
+              },
+              {
+                "level": "INFO",
+                "ts": "2026-07-10 12:14:50.005",
+                "thread": "Source Filter/Transformer JavaScript Task on API_GATEWAY_REST (07fc0b36-e4f9-4923-abed-f3bb4b9c1082) < pool-1-thread-18",
+                "msg": "transformer: rt.namechannelStatistics"
+              }
             ]
           }
   - name: Error - 503 Service Unavailable
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/logs/"
       method: GET
     response:
       status: 503

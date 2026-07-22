@@ -1,0 +1,70 @@
+info:
+  name: Create Draft - File Reader (S3 scheme)
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "HL7-Ingest-S3-Bucket",
+        "description": "Canal de ingesta HL7 leyendo desde un bucket S3",
+        "initial_state": "STARTED",
+        "source": [
+          {
+            "template_codigo": "file-reader",
+            "properties": {
+              "scheme": "S3",
+              "bucket": "mi-bucket-de-datos",
+              "prefix": "entradas",
+              "region": "us-east-1",
+              "username": "admin",
+              "password": "secreto",
+              "afterProcessingAction": "MOVE",
+              "moveToDirectory": "mi-bucket-de-datos/procesados",
+              "moveToFileName": "${UUID}",
+              "errorReadingAction": "NONE",
+              "charsetEncoding": "UTF-8"
+            }
+          }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 200 OK (INCOMPLETE)
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "e1f2a3b4-c5d6-4e7f-8a9b-0c1d2e3f4a5b",
+            "status": "INCOMPLETE",
+            "json_data": {
+              "name": "HL7-Ingest-S3-Bucket",
+              "source": [{"template_codigo": "file-reader", "properties": {"scheme": "S3", "bucket": "mi-bucket-de-datos", "prefix": "entradas"}}]
+            },
+            "xml_generated": null
+          }
+
+docs: "S3 scheme: `<host>` is derived as `f\"{bucket}/{prefix}\"`. `anonymous` is ALWAYS forced to `false` regardless of payload - confirmed against a real export where a stale `anonymous: true` leaked through from a previous scheme selection in Mirth's own UI, which is exactly the bug this forcing prevents. `username`/`password` map to AWS Access Key ID / Secret Access Key. Injects `<schemeProperties class=\"...S3SchemeProperties\">` with `region` from the payload (defaults to `us-east-1` if omitted) plus the fixed credential-provider-chain fields. No `destinations` yet -> INCOMPLETE (200)."

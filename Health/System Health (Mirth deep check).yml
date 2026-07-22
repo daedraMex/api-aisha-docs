@@ -17,7 +17,7 @@ settings:
 examples:
   - name: Success - 200 OK
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/system-health/"
       method: GET
     response:
       status: 200
@@ -68,7 +68,7 @@ examples:
           }
   - name: Error - 503 Service Unavailable (Mirth down)
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/system-health/"
       method: GET
     response:
       status: 503

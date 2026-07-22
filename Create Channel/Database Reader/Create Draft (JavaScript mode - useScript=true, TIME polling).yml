@@ -47,8 +47,35 @@ settings:
 examples:
   - name: Success - 200 OK (INCOMPLETE)
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
       method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "Reporte-Pacientes-JS",
+            "description": "Mismo canal con script JavaScript en vez de SQL puro y agenda por hora fija",
+            "initial_state": "STARTED",
+            "source": [
+              {
+                "template_codigo": "database-reader",
+                "properties": {
+                  "polling_type": "TIME",
+                  "polling_hour": 6,
+                  "polling_minute": 30,
+                  "poll_on_start": false,
+                  "driver": "com.mysql.cj.jdbc.Driver",
+                  "url": "jdbc:mysql://db.aisha.internal:3306/resultados",
+                  "username": "readonly_user",
+                  "password": "S3cr3tPass!",
+                  "use_script": true,
+                  "select": "var dbConn; try { dbConn = DatabaseConnectionFactory.createDatabaseConnection('com.mysql.cj.jdbc.Driver','jdbc:mysql://db.aisha.internal:3306/resultados','readonly_user','S3cr3tPass!'); return result; } finally { if (dbConn) { dbConn.close(); } }",
+                  "update": "var dbConn; try { dbConn = DatabaseConnectionFactory.createDatabaseConnection('com.mysql.cj.jdbc.Driver','jdbc:mysql://db.aisha.internal:3306/resultados','readonly_user','S3cr3tPass!'); } finally { if (dbConn) { dbConn.close(); } }",
+                  "update_mode": 1
+                }
+              }
+            ]
+          }
     response:
       status: 200
       statusText: OK

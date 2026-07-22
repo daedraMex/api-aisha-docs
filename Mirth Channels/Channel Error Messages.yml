@@ -24,8 +24,17 @@ settings:
 examples:
   - name: Success - 200 OK
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/messages/errors/"
       method: GET
+      params:
+        - name: limit
+          value: "20"
+          type: query
+          disabled: true
+        - name: offset
+          value: "0"
+          type: query
+          disabled: true
     response:
       status: 200
       statusText: OK
@@ -36,28 +45,48 @@ examples:
         type: json
         data: |-
           {
-            "total": 1,
+            "total": 2,
             "pages": 1,
             "limit": 20,
             "offset": 0,
             "data": [
               {
-                "message_id": 482914,
-                "channel_id": "07fc0b36-e4f9-4923-abed-f3bb4b9c1082",
-                "channel_name": "HL7-Ingest-Sede-Norte",
+                "message_id": 9,
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "channel_name": null,
                 "status": "ERROR",
-                "error_code": 500,
-                "received_date": "2026-07-07T12:05:00Z",
-                "response_date": "2026-07-07T12:05:01Z",
-                "error_type": "DESTINATION_TRANSPORT",
-                "message_preview": "Connection refused: connect"
+                "error_code": null,
+                "received_date": "2026-04-07T15:41:38.109+00:00",
+                "response_date": "2026-04-07T15:41:43.206+00:00",
+                "error_type": null,
+                "message_preview": null
+              },
+              {
+                "message_id": 1,
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "channel_name": null,
+                "status": "ERROR",
+                "error_code": null,
+                "received_date": "2026-04-06T15:17:03.376+00:00",
+                "response_date": null,
+                "error_type": null,
+                "message_preview": null
               }
             ]
           }
   - name: Error - 404 Not Found
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/messages/errors/"
       method: GET
+      params:
+        - name: limit
+          value: "20"
+          type: query
+          disabled: true
+        - name: offset
+          value: "0"
+          type: query
+          disabled: true
     response:
       status: 404
       statusText: Not Found

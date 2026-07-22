@@ -2,23 +2,34 @@ opencollection: 1.0.0
 
 info:
   name: Aisha Integration Engine
+config:
+  proxy:
+    inherit: true
+    config:
+      protocol: http
+      hostname: ""
+      port: ""
+      auth:
+        username: ""
+        password: ""
+      bypassProxy: ""
 
 request:
   variables:
     - name: base_url
       value: http://localhost:8011
     - name: channel_id
-      value: 07fc0b36-e4f9-4923-abed-f3bb4b9c1082
+      value: 7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b
     - name: message_id
-      value: "482913"
+      value: "9"
     - name: user_id
       value: 3f2e9b1a-6c4d-4a2f-9e21-7d8b5c1a9f30
     - name: feature
       value: canales
     - name: filter_id
-      value: b6e1c8a2-9f3d-4e7a-8c1b-2d5f6a7b8c9d
+      value: 9e73c186-ce07-4429-abe6-d8691d98bf7f
     - name: template_id
-      value: a1b2c3d4-e5f6-4789-9abc-def012345678
+      value: ce08a9ce-1a8a-47c4-a7e5-b93b0a50fc6e
     - name: destination_id
       value: c7d8e9f0-1a2b-4c3d-8e9f-0a1b2c3d4e5f
     - name: draft_id

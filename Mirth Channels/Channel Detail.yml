@@ -17,7 +17,7 @@ settings:
 examples:
   - name: Success - 200 OK
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/"
       method: GET
     response:
       status: 200
@@ -29,19 +29,54 @@ examples:
         type: json
         data: |-
           {
-            "channel_id": "07fc0b36-e4f9-4923-abed-f3bb4b9c1082",
-            "name": "HL7-Ingest-Sede-Norte",
-            "source_connector": { "transport": "TCP Listener", "properties_class": "com.mirth.connect.connectors.tcp.TcpReceiverProperties" },
+            "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+            "name": "API_WORKLIST",
+            "source_connector": {
+              "transport": "HTTP Listener",
+              "properties_class": "com.mirth.connect.connectors.http.HttpReceiverProperties"
+            },
             "destination_connectors": [
-              { "metadata_id": 1, "name": "Write to DB", "transport": "Database Writer", "properties_class": "com.mirth.connect.connectors.jdbc.DatabaseDispatcherProperties" }
+              {
+                "metadata_id": "1",
+                "name": "CREATE",
+                "transport": "Channel Writer",
+                "properties_class": "com.mirth.connect.connectors.vm.VmDispatcherProperties"
+              },
+              {
+                "metadata_id": "4",
+                "name": "UPDATE",
+                "transport": "Channel Writer",
+                "properties_class": "com.mirth.connect.connectors.vm.VmDispatcherProperties"
+              },
+              {
+                "metadata_id": "7",
+                "name": "CANCEL",
+                "transport": "Channel Writer",
+                "properties_class": "com.mirth.connect.connectors.vm.VmDispatcherProperties"
+              },
+              {
+                "metadata_id": "5",
+                "name": "Destination 1",
+                "transport": "TCP Sender",
+                "properties_class": "com.mirth.connect.connectors.tcp.TcpDispatcherProperties"
+              }
             ],
             "metadata_columns": [
-              { "metadata_id": 1, "name": "PATIENT_ID", "type": "STRING" }
+              {
+                "metadata_id": "SOURCE",
+                "name": "mirth_source",
+                "type": "STRING"
+              },
+              {
+                "metadata_id": "TYPE",
+                "name": "mirth_type",
+                "type": "STRING"
+              }
             ]
           }
   - name: Error - 404 Not Found
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/"
       method: GET
     response:
       status: 404

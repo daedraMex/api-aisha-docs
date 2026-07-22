@@ -1,0 +1,77 @@
+info:
+  name: Create Draft - HTTP Listener (Custom Java Class Authentication)
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "HTTP-Ingest-Custom-Auth",
+        "description": "Canal HTTP Listener con Custom Java Class Authentication",
+        "initial_state": "STARTED",
+        "source": [
+          {
+            "template_codigo": "http-listener",
+            "properties": {
+              "auth_type": "CUSTOM",
+              "authenticator_class": "com.miempresa.mirth.auth.MiAutenticadorCustom",
+              "properties": {
+                "url_servidor_auth": "https://auth.miempresa.com/v1"
+              },
+              "local_port": 8080
+            }
+          }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 200 OK (INCOMPLETE)
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "e1f2a3b4-c5d6-4e7f-8a9b-0c1d2e3f4a5c",
+            "status": "INCOMPLETE",
+            "json_data": {
+              "name": "HTTP-Ingest-Custom-Auth",
+              "source": [
+                {
+                  "template_codigo": "http-listener",
+                  "properties": {
+                    "auth_type": "CUSTOM",
+                    "authenticator_class": "com.miempresa.mirth.auth.MiAutenticadorCustom",
+                    "properties": {
+                      "url_servidor_auth": "https://auth.miempresa.com/v1"
+                    },
+                    "local_port": 8080
+                  }
+                }
+              ]
+            },
+            "xml_generated": null
+          }
+
+docs: "auth_type=CUSTOM: authenticator_class (string) y properties (mapa arbitrario key->value) son payload-owned, sin default generico sensato - la clase Java custom la debe implementar el cliente."

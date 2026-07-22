@@ -1,0 +1,75 @@
+info:
+  name: Create Draft - HTTP Listener (OAuth 2.0 Token Verification)
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "HTTP-Ingest-OAuth2-Verification",
+        "description": "Canal HTTP Listener con OAuth 2.0 Token Verification",
+        "initial_state": "STARTED",
+        "source": [
+          {
+            "template_codigo": "http-listener",
+            "properties": {
+              "auth_type": "OAUTH2_VERIFICATION",
+              "token_location": "HEADER",
+              "location_key": "Authorization",
+              "verification_url": "https://www.googleapis.com/oauth2/v3/tokeninfo",
+              "local_port": 8080
+            }
+          }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 200 OK (INCOMPLETE)
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "e1f2a3b4-c5d6-4e7f-8a9b-0c1d2e3f4a5c",
+            "status": "INCOMPLETE",
+            "json_data": {
+              "name": "HTTP-Ingest-OAuth2-Verification",
+              "source": [
+                {
+                  "template_codigo": "http-listener",
+                  "properties": {
+                    "auth_type": "OAUTH2_VERIFICATION",
+                    "token_location": "HEADER",
+                    "location_key": "Authorization",
+                    "verification_url": "https://www.googleapis.com/oauth2/v3/tokeninfo",
+                    "local_port": 8080
+                  }
+                }
+              ]
+            },
+            "xml_generated": null
+          }
+
+docs: "auth_type=OAUTH2_VERIFICATION: token_location, location_key y verification_url son payload-owned. Es el sexto tipo de Authentication Type, no estaba en la matriz UI original - confirmado en exports reales de Mirth Administrator."

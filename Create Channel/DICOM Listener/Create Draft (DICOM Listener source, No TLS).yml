@@ -46,8 +46,34 @@ settings:
 examples:
   - name: Success - 200 OK (INCOMPLETE)
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
       method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "DICOM-Ingest-Sede-Norte",
+            "description": "Canal de recepción DICOM para Sede Norte",
+            "initial_state": "STARTED",
+            "metaDataColumn": [
+              { "name": "STUDY_UID", "type": "STRING", "mappingName": "study_instance_uid" }
+            ],
+            "source": [
+              {
+                "template_codigo": "dicom-listener",
+                "properties": {
+                  "local_address": "0.0.0.0",
+                  "local_port": 104,
+                  "application_entity": "AISHA_PACS",
+                  "respond_after_processing": true,
+                  "response_variable": "None"
+                }
+              }
+            ],
+            "prune_metadata_days": 30,
+            "prune_content_days": 60,
+            "archive_enabled": true
+          }
     response:
       status: 200
       statusText: OK

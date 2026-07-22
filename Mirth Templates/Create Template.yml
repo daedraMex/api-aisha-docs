@@ -30,8 +30,18 @@ settings:
 examples:
   - name: Success - 201 Created
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/plantillas/"
       method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "nombre": "Conector Source HL7",
+            "codigo": "source-hl7-tcp",
+            "tipo_componente": "SOURCE_CONNECTOR",
+            "xml_content": "<sourceConnector>...</sourceConnector>",
+            "version_mirth": "4.4.2"
+          }
     response:
       status: 201
       statusText: Created
@@ -54,7 +64,7 @@ examples:
           }
   - name: Error - 400 Bad Request
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/plantillas/"
       method: POST
     response:
       status: 400

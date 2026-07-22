@@ -17,7 +17,7 @@ settings:
 examples:
   - name: Success - 200 OK
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/channels/statistics/"
       method: GET
     response:
       status: 200
@@ -29,24 +29,90 @@ examples:
         type: json
         data: |-
           {
-            "total": 1,
+            "total": 7,
             "data": [
               {
-                "channel_id": "07fc0b36-e4f9-4923-abed-f3bb4b9c1082",
-                "name": "HL7-Ingest-Sede-Norte",
-                "status": "STARTED",
-                "received": 1204,
-                "sent": 1198,
-                "error": 6,
+                "channel_id": "f934fe1d-3fca-491b-8254-a341ff039a6a",
+                "name": "demo 226",
+                "status": null,
+                "received": 0,
+                "sent": 0,
+                "error": 0,
                 "filtered": 0,
                 "queued": 0,
-                "total_messages": 1204
+                "total_messages": 0
+              },
+              {
+                "channel_id": "7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b",
+                "name": "worklist-hl7-listener",
+                "status": null,
+                "received": 20,
+                "sent": 20,
+                "error": 0,
+                "filtered": 0,
+                "queued": 0,
+                "total_messages": 40
+              },
+              {
+                "channel_id": "2fe95f45-a9ec-400c-a0f0-f621d8ae438e",
+                "name": "MONITOR_CANAL",
+                "status": null,
+                "received": 11832,
+                "sent": 11832,
+                "error": 0,
+                "filtered": 0,
+                "queued": 0,
+                "total_messages": 23664
+              },
+              {
+                "channel_id": "53c430a6-2bce-4d38-8076-6768e9a78c43",
+                "name": "API_WORKLIST_v2",
+                "status": null,
+                "received": 27,
+                "sent": 23,
+                "error": 20,
+                "filtered": 79,
+                "queued": 0,
+                "total_messages": 149
+              },
+              {
+                "channel_id": "5f9adc69-5da5-456c-967d-69c30e7ae32f",
+                "name": "keycloak",
+                "status": null,
+                "received": 4,
+                "sent": 3,
+                "error": 1,
+                "filtered": 0,
+                "queued": 0,
+                "total_messages": 8
+              },
+              {
+                "channel_id": "394a9988-3b45-4ce7-8e3b-acc7fada154b",
+                "name": "JOB_DAILY_CHANNEL_STATISTICS",
+                "status": null,
+                "received": 202576,
+                "sent": 202576,
+                "error": 0,
+                "filtered": 0,
+                "queued": 0,
+                "total_messages": 405152
+              },
+              {
+                "channel_id": "4c88aebb-5bad-4f81-9d76-0e9d5e3719e1",
+                "name": "este es un  nuevo canal",
+                "status": null,
+                "received": 0,
+                "sent": 0,
+                "error": 0,
+                "filtered": 0,
+                "queued": 0,
+                "total_messages": 0
               }
             ]
           }
   - name: Error - 503 Service Unavailable
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/channels/statistics/"
       method: GET
     response:
       status: 503

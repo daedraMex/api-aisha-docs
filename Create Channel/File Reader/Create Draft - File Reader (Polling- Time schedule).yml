@@ -1,0 +1,68 @@
+info:
+  name: "Create Draft - File Reader (Polling: Time schedule)"
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "HL7-Ingest-Polling-Time",
+        "description": "Canal de ingesta HL7 con polling a hora fija",
+        "initial_state": "STARTED",
+        "source": [
+          {
+            "template_codigo": "file-reader",
+            "properties": {
+              "scheme": "FILE",
+              "directory": "/home/docs",
+              "afterProcessingAction": "NONE",
+              "errorReadingAction": "NONE",
+              "charsetEncoding": "DEFAULT_ENCODING",
+              "polling_type": "TIME",
+              "poll_on_start": false,
+              "polling_hour": 5,
+              "polling_minute": 16
+            }
+          }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 200 OK (INCOMPLETE)
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "e1f2a3b4-c5d6-4e7f-8a9b-0c1d2e3f4a5b",
+            "status": "INCOMPLETE",
+            "json_data": {
+              "name": "HL7-Ingest-Polling-Time",
+              "source": [{"template_codigo": "file-reader", "properties": {"scheme": "FILE", "polling_type": "TIME", "polling_hour": 5, "polling_minute": 16}}]
+            },
+            "xml_generated": null
+          }
+
+docs: 'Polling Settings (Schedule Type = Time): `polling_type: "TIME"` activates `polling_hour`/`polling_minute` (fixed daily time, 24h) - `polling_frequency` is irrelevant in this mode and can be omitted, same as here. Source Settings fields omitted entirely on purpose in this example to show their defaults auto-fill from `MirthFieldDefinition.default_value` (migration 0041) - contrast with the Interval example above, which sets them explicitly. No `destinations` yet -> INCOMPLETE (200).'

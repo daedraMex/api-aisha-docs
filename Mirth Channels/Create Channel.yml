@@ -31,8 +31,19 @@ settings:
 examples:
   - name: Success - 201 Created
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/channels/create/"
       method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "HL7-Ingest-Sede-Sur",
+            "description": "Canal de ingesta HL7 para Sede Sur",
+            "initialState": "STOPPED",
+            "metadataDay": 30,
+            "contentDay": 7,
+            "enable": false
+          }
     response:
       status: 201
       statusText: Created
@@ -47,7 +58,7 @@ examples:
           }
   - name: Error - 400 Bad Request
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/channels/create/"
       method: POST
     response:
       status: 400

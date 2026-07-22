@@ -17,7 +17,7 @@ settings:
 examples:
   - name: Success - 200 OK
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/channels/"
       method: GET
     response:
       status: 200
@@ -29,25 +29,325 @@ examples:
         type: json
         data: |-
           {
-            "total": 1,
+            "total": 12,
             "data": [
               {
                 "channel_id": "07fc0b36-e4f9-4923-abed-f3bb4b9c1082",
-                "name": "HL7-Ingest-Sede-Norte",
+                "name": "API_GATEWAY_REST",
                 "enabled": true,
-                "status": "STARTED",
-                "description": "Canal de ingesta HL7 para Sede Norte",
-                "last_modified": "2026-06-20T14:02:11Z",
-                "source": { "transport": "TCP Listener", "properties_class": "com.mirth.connect.connectors.tcp.TcpReceiverProperties" },
+                "status": "ENABLED",
+                "description": "Api  para  el motor de integraciones",
+                "last_modified": "2026-06-09T14:21:56-06:00",
+                "source": {
+                  "transport": "HTTP Listener",
+                  "properties_class": null
+                },
                 "destinations": [
-                  { "metadata_id": 1, "name": "Write to DB", "transport": "Database Writer", "properties_class": "com.mirth.connect.connectors.jdbc.DatabaseDispatcherProperties" }
+                  {
+                    "metadata_id": "1",
+                    "name": "Destination 1",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  }
+                ]
+              },
+              {
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "name": "API_WORKLIST",
+                "enabled": true,
+                "status": "ENABLED",
+                "description": "",
+                "last_modified": "2026-06-18T10:48:46-06:00",
+                "source": {
+                  "transport": "HTTP Listener",
+                  "properties_class": null
+                },
+                "destinations": [
+                  {
+                    "metadata_id": "1",
+                    "name": "CREATE",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  },
+                  {
+                    "metadata_id": "4",
+                    "name": "UPDATE",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  },
+                  {
+                    "metadata_id": "7",
+                    "name": "CANCEL",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  },
+                  {
+                    "metadata_id": "5",
+                    "name": "Destination 1",
+                    "transport": "TCP Sender",
+                    "properties_class": null
+                  }
+                ]
+              },
+              {
+                "channel_id": "53c430a6-2bce-4d38-8076-6768e9a78c43",
+                "name": "API_WORKLIST_v2",
+                "enabled": true,
+                "status": "ENABLED",
+                "description": "",
+                "last_modified": "2026-06-19T13:42:23-06:00",
+                "source": {
+                  "transport": "HTTP Listener",
+                  "properties_class": null
+                },
+                "destinations": [
+                  {
+                    "metadata_id": "1",
+                    "name": "CREATE",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  },
+                  {
+                    "metadata_id": "4",
+                    "name": "UPDATE",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  },
+                  {
+                    "metadata_id": "7",
+                    "name": "CANCEL",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  },
+                  {
+                    "metadata_id": "8",
+                    "name": "DICOM_STUDY",
+                    "transport": "DICOM Sender",
+                    "properties_class": null
+                  },
+                  {
+                    "metadata_id": "9",
+                    "name": "Delete Temp Dicom",
+                    "transport": "JavaScript Writer",
+                    "properties_class": null
+                  },
+                  {
+                    "metadata_id": "5",
+                    "name": "SentHL7",
+                    "transport": "TCP Sender",
+                    "properties_class": null
+                  },
+                  {
+                    "metadata_id": "10",
+                    "name": "clone",
+                    "transport": "DICOM Sender",
+                    "properties_class": null
+                  },
+                  {
+                    "metadata_id": "11",
+                    "name": "ORTHANC",
+                    "transport": "DICOM Sender",
+                    "properties_class": null
+                  }
+                ]
+              },
+              {
+                "channel_id": "394a9988-3b45-4ce7-8e3b-acc7fada154b",
+                "name": "JOB_DAILY_CHANNEL_STATISTICS",
+                "enabled": true,
+                "status": "ENABLED",
+                "description": "",
+                "last_modified": "2026-06-09T13:37:48-06:00",
+                "source": {
+                  "transport": "JavaScript Reader",
+                  "properties_class": null
+                },
+                "destinations": [
+                  {
+                    "metadata_id": "1",
+                    "name": "Destination 1",
+                    "transport": "JavaScript Writer",
+                    "properties_class": null
+                  }
+                ]
+              },
+              {
+                "channel_id": "2fe95f45-a9ec-400c-a0f0-f621d8ae438e",
+                "name": "MONITOR_CANAL",
+                "enabled": true,
+                "status": "ENABLED",
+                "description": "",
+                "last_modified": "2026-06-15T18:03:10-06:00",
+                "source": {
+                  "transport": "JavaScript Reader",
+                  "properties_class": null
+                },
+                "destinations": [
+                  {
+                    "metadata_id": "1",
+                    "name": "CORREO",
+                    "transport": "SMTP Sender",
+                    "properties_class": null
+                  },
+                  {
+                    "metadata_id": "6",
+                    "name": "SMS",
+                    "transport": "HTTP Sender",
+                    "properties_class": null
+                  },
+                  {
+                    "metadata_id": "7",
+                    "name": "Destination 1",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  }
+                ]
+              },
+              {
+                "channel_id": "190b4bf9-6a75-4fd9-aac0-86afa24dc52c",
+                "name": "demo",
+                "enabled": true,
+                "status": "ENABLED",
+                "description": "",
+                "last_modified": "2026-04-28T09:35:09-06:00",
+                "source": {
+                  "transport": "Database Reader",
+                  "properties_class": null
+                },
+                "destinations": [
+                  {
+                    "metadata_id": "1",
+                    "name": "Destination 1",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  }
+                ]
+              },
+              {
+                "channel_id": "e8ce222a-5386-4c30-b45f-e306bca968ea",
+                "name": "demo  nuevo",
+                "enabled": true,
+                "status": "ENABLED",
+                "description": "",
+                "last_modified": "2026-06-17T17:53:19-06:00",
+                "source": {
+                  "transport": "Channel Reader",
+                  "properties_class": null
+                },
+                "destinations": [
+                  {
+                    "metadata_id": "1",
+                    "name": "Destination 1",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  }
+                ]
+              },
+              {
+                "channel_id": "f934fe1d-3fca-491b-8254-a341ff039a6a",
+                "name": "demo 226",
+                "enabled": true,
+                "status": "ENABLED",
+                "description": "",
+                "last_modified": "2026-06-17T17:13:34-06:00",
+                "source": {
+                  "transport": "Channel Reader",
+                  "properties_class": null
+                },
+                "destinations": [
+                  {
+                    "metadata_id": "1",
+                    "name": "Destination 1",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  }
+                ]
+              },
+              {
+                "channel_id": "7217db02-406c-4afb-a5cd-55b267b71f2d",
+                "name": "dsdfaf",
+                "enabled": true,
+                "status": "ENABLED",
+                "description": "",
+                "last_modified": "2026-07-10T05:25:22-06:00",
+                "source": {
+                  "transport": "File Reader",
+                  "properties_class": null
+                },
+                "destinations": [
+                  {
+                    "metadata_id": "1",
+                    "name": "Destination 1",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  }
+                ]
+              },
+              {
+                "channel_id": "4c88aebb-5bad-4f81-9d76-0e9d5e3719e1",
+                "name": "este es un  nuevo canal",
+                "enabled": true,
+                "status": "ENABLED",
+                "description": "",
+                "last_modified": "2026-06-17T17:40:07-06:00",
+                "source": {
+                  "transport": "Channel Reader",
+                  "properties_class": null
+                },
+                "destinations": [
+                  {
+                    "metadata_id": "1",
+                    "name": "Destination 1",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  }
+                ]
+              },
+              {
+                "channel_id": "5f9adc69-5da5-456c-967d-69c30e7ae32f",
+                "name": "keycloak",
+                "enabled": true,
+                "status": "ENABLED",
+                "description": "",
+                "last_modified": "2026-06-17T10:43:13-06:00",
+                "source": {
+                  "transport": "Channel Reader",
+                  "properties_class": null
+                },
+                "destinations": [
+                  {
+                    "metadata_id": "1",
+                    "name": "Destination 1",
+                    "transport": "JavaScript Writer",
+                    "properties_class": null
+                  }
+                ]
+              },
+              {
+                "channel_id": "7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b",
+                "name": "worklist-hl7-listener",
+                "enabled": true,
+                "status": "ENABLED",
+                "description": "",
+                "last_modified": "2026-04-08T09:14:44-06:00",
+                "source": {
+                  "transport": "TCP Listener",
+                  "properties_class": null
+                },
+                "destinations": [
+                  {
+                    "metadata_id": "1",
+                    "name": "Destination 1",
+                    "transport": "TCP Sender",
+                    "properties_class": null
+                  }
                 ]
               }
             ]
           }
   - name: Error - 503 Service Unavailable
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/channels/"
       method: GET
     response:
       status: 503

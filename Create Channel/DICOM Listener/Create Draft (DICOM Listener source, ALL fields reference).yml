@@ -73,7 +73,7 @@ settings:
 examples:
   - name: Success - 200 OK (INCOMPLETE)
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
       method: POST
     response:
       status: 200

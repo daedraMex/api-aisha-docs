@@ -1,0 +1,64 @@
+info:
+  name: Create Draft - File Reader (FILE scheme)
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "HL7-Ingest-Bandeja-Local",
+        "description": "Canal de ingesta HL7 leyendo desde una carpeta local",
+        "initial_state": "STARTED",
+        "source": [
+          {
+            "template_codigo": "file-reader",
+            "properties": {
+              "scheme": "FILE",
+              "directory": "/home/docs",
+              "afterProcessingAction": "NONE",
+              "errorReadingAction": "NONE",
+              "charsetEncoding": "DEFAULT_ENCODING"
+            }
+          }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 200 OK (INCOMPLETE)
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "e1f2a3b4-c5d6-4e7f-8a9b-0c1d2e3f4a5b",
+            "status": "INCOMPLETE",
+            "json_data": {
+              "name": "HL7-Ingest-Bandeja-Local",
+              "source": [{"template_codigo": "file-reader", "properties": {"scheme": "FILE", "directory": "/home/docs"}}]
+            },
+            "xml_generated": null
+          }
+
+docs: "FILE scheme: `directory` maps verbatim to `<host>`. `anonymous`/`username`/`password` are forced to `true`/`anonymous`/`anonymous` by `bind_file_reader_source` regardless of payload - not sent here since they'd be ignored. No `schemeProperties` block is injected for this scheme. No `destinations` yet -> INCOMPLETE (200)."

@@ -1,0 +1,67 @@
+info:
+  name: Create Draft - File Reader (SFTP scheme)
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "HL7-Ingest-SFTP-Seguro",
+        "description": "Canal de ingesta HL7 leyendo desde un servidor SFTP",
+        "initial_state": "STARTED",
+        "source": [
+          {
+            "template_codigo": "file-reader",
+            "properties": {
+              "scheme": "SFTP",
+              "host": "sftp.tuempresa.com",
+              "port": 22,
+              "username": "anonymous",
+              "password": "anonymous",
+              "afterProcessingAction": "NONE",
+              "errorReadingAction": "NONE",
+              "charsetEncoding": "DEFAULT_ENCODING"
+            }
+          }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success - 200 OK (INCOMPLETE)
+    request:
+      url: ""
+      method: POST
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "e1f2a3b4-c5d6-4e7f-8a9b-0c1d2e3f4a5b",
+            "status": "INCOMPLETE",
+            "json_data": {
+              "name": "HL7-Ingest-SFTP-Seguro",
+              "source": [{"template_codigo": "file-reader", "properties": {"scheme": "SFTP", "host": "sftp.tuempresa.com", "port": 22}}]
+            },
+            "xml_generated": null
+          }
+
+docs: "SFTP scheme: same `host/port` join as FTP, but there is NO `anonymous` flag to send - confirmed against a real Mirth export that SFTP's Anonymous toggle is disabled in the UI (no FTP-style anonymous login exists for SFTP), so `bind_file_reader_source` always forces `anonymous=false` and takes `username`/`password` verbatim regardless of any `anonymous` key in the payload. Injects `<schemeProperties class=\"...SftpSchemeProperties\">` with fixed password-auth defaults (`passwordAuth=true`, `hostKeyChecking=ask`), also confirmed against a real export - not guessed. No `destinations` yet -> INCOMPLETE (200)."

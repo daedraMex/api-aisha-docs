@@ -5,14 +5,8 @@ info:
 
 http:
   method: GET
-  url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/messages/?limit=20&offset=0"
+  url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/messages/"
   params:
-    - name: limit
-      value: "20"
-      type: query
-    - name: offset
-      value: "0"
-      type: query
     - name: status
       value: ERROR
       type: query
@@ -40,8 +34,17 @@ settings:
 examples:
   - name: Success - 200 OK
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/messages/"
       method: GET
+      params:
+        - name: limit
+          value: "20"
+          type: query
+          disabled: true
+        - name: offset
+          value: "0"
+          type: query
+          disabled: true
     response:
       status: 200
       statusText: OK
@@ -52,25 +55,196 @@ examples:
         type: json
         data: |-
           {
-            "total": 1,
+            "total": 20,
             "pages": 1,
             "limit": 20,
             "offset": 0,
             "data": [
               {
-                "message_id": 482913,
-                "channel_id": "07fc0b36-e4f9-4923-abed-f3bb4b9c1082",
+                "message_id": 115,
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "status": "FILTERED",
+                "received_date": null,
+                "send_date": null,
+                "response_date": null,
+                "metadata": {}
+              },
+              {
+                "message_id": 114,
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "status": "FILTERED",
+                "received_date": null,
+                "send_date": null,
+                "response_date": null,
+                "metadata": {}
+              },
+              {
+                "message_id": 113,
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "status": "FILTERED",
+                "received_date": null,
+                "send_date": null,
+                "response_date": null,
+                "metadata": {}
+              },
+              {
+                "message_id": 112,
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "status": "FILTERED",
+                "received_date": null,
+                "send_date": null,
+                "response_date": null,
+                "metadata": {}
+              },
+              {
+                "message_id": 111,
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "status": "FILTERED",
+                "received_date": null,
+                "send_date": null,
+                "response_date": null,
+                "metadata": {}
+              },
+              {
+                "message_id": 110,
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
                 "status": "SENT",
-                "received_date": "2026-07-07T12:00:00Z",
-                "send_date": "2026-07-07T12:00:01Z",
-                "response_date": "2026-07-07T12:00:02Z",
-                "metadata": { "PATIENT_ID": "P-0001" }
+                "received_date": null,
+                "send_date": null,
+                "response_date": null,
+                "metadata": {}
+              },
+              {
+                "message_id": 109,
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "status": "SENT",
+                "received_date": null,
+                "send_date": null,
+                "response_date": null,
+                "metadata": {}
+              },
+              {
+                "message_id": 108,
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "status": "SENT",
+                "received_date": null,
+                "send_date": null,
+                "response_date": null,
+                "metadata": {}
+              },
+              {
+                "message_id": 107,
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "status": "SENT",
+                "received_date": null,
+                "send_date": null,
+                "response_date": null,
+                "metadata": {}
+              },
+              {
+                "message_id": 106,
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "status": "SENT",
+                "received_date": null,
+                "send_date": null,
+                "response_date": null,
+                "metadata": {}
+              },
+              {
+                "message_id": 105,
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "status": "FILTERED",
+                "received_date": null,
+                "send_date": null,
+                "response_date": null,
+                "metadata": {}
+              },
+              {
+                "message_id": 104,
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "status": "FILTERED",
+                "received_date": null,
+                "send_date": null,
+                "response_date": null,
+                "metadata": {}
+              },
+              {
+                "message_id": 103,
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "status": "FILTERED",
+                "received_date": null,
+                "send_date": null,
+                "response_date": null,
+                "metadata": {}
+              },
+              {
+                "message_id": 99,
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "status": "FILTERED",
+                "received_date": null,
+                "send_date": null,
+                "response_date": null,
+                "metadata": {}
+              },
+              {
+                "message_id": 96,
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "status": "FILTERED",
+                "received_date": null,
+                "send_date": null,
+                "response_date": null,
+                "metadata": {}
+              },
+              {
+                "message_id": 95,
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "status": "FILTERED",
+                "received_date": null,
+                "send_date": null,
+                "response_date": null,
+                "metadata": {}
+              },
+              {
+                "message_id": 94,
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "status": "FILTERED",
+                "received_date": null,
+                "send_date": null,
+                "response_date": null,
+                "metadata": {}
+              },
+              {
+                "message_id": 93,
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "status": "FILTERED",
+                "received_date": null,
+                "send_date": null,
+                "response_date": null,
+                "metadata": {}
+              },
+              {
+                "message_id": 92,
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "status": "FILTERED",
+                "received_date": null,
+                "send_date": null,
+                "response_date": null,
+                "metadata": {}
+              },
+              {
+                "message_id": 91,
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "status": "SENT",
+                "received_date": null,
+                "send_date": null,
+                "response_date": null,
+                "metadata": {}
               }
             ]
           }
   - name: Error - 400 Bad Request (invalid status)
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/messages/"
       method: GET
     response:
       status: 400
