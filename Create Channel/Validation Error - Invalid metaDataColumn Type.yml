@@ -1,7 +1,7 @@
 info:
   name: Validation Error - Invalid metaDataColumn Type
   type: http
-  seq: 7
+  seq: 4
 
 http:
   method: POST

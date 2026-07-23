@@ -1,0 +1,7 @@
+info:
+  name: JavaScript Reader Source Connector
+  type: folder
+  seq: 11
+
+request:
+  auth: inherit

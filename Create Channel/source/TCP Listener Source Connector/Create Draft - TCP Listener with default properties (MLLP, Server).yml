@@ -1,0 +1,114 @@
+info:
+  name: Create Draft - TCP Listener with default properties (MLLP, Server)
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "tcp-listener-demo",
+        "description": "MLLP server listening on 0.0.0.0:6661",
+        "initial_state": "STARTED",
+        "metaDataColumn": [
+          { "name": "REMOTE_IP", "type": "STRING" }
+        ],
+        "source": [
+          {
+            "template_codigo": "tcp-listener",
+            "properties": {
+              "host": "0.0.0.0",
+              "port": 6661,
+              "response_variable": "Auto-generate (After source transformer)",
+              "respond_after_processing": true,
+              "process_batch": false,
+              "first_response": false,
+              "processing_threads": 1,
+              "queue_buffer_size": 1000,
+              "start_of_message_bytes": "0B",
+              "end_of_message_bytes": "1C0D",
+              "use_mllpv2": false,
+              "server_mode": true,
+              "reconnect_interval": 5000,
+              "max_connections": 10,
+              "receive_timeout": 0,
+              "buffer_size": 65536,
+              "keep_connection_open": true,
+              "data_type_binary": false,
+              "charset_encoding": "DEFAULT_ENCODING",
+              "respond_on_new_connection": 0
+            }
+          }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK - INCOMPLETE (destinations still missing)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+      method: POST
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "44444444-4444-4444-4444-444444444444",
+            "status": "INCOMPLETE",
+            "json_data": {
+              "name": "tcp-listener-demo",
+              "description": "MLLP server listening on 0.0.0.0:6661",
+              "initial_state": "STARTED",
+              "metadata_columns": [
+                { "name": "REMOTE_IP", "type": "STRING", "mappingName": null }
+              ],
+              "source": [
+                {
+                  "template_codigo": "tcp-listener",
+                  "properties": {
+                    "host": "0.0.0.0",
+                    "port": 6661,
+                    "response_variable": "Auto-generate (After source transformer)",
+                    "respond_after_processing": true,
+                    "process_batch": false,
+                    "first_response": false,
+                    "processing_threads": 1,
+                    "queue_buffer_size": 1000,
+                    "start_of_message_bytes": "0B",
+                    "end_of_message_bytes": "1C0D",
+                    "use_mllpv2": false,
+                    "server_mode": true,
+                    "reconnect_interval": 5000,
+                    "max_connections": 10,
+                    "receive_timeout": 0,
+                    "buffer_size": 65536,
+                    "keep_connection_open": true,
+                    "data_type_binary": false,
+                    "charset_encoding": "DEFAULT_ENCODING",
+                    "respond_on_new_connection": 0
+                  }
+                }
+              ],
+              "destinations": []
+            },
+            "xml_generated": null
+          }
+
+docs: "No draft_id -> creates a new draft. destinations is omitted (no DESTINATION_CONNECTOR template seeded yet), so the handler persists INCOMPLETE instead of compiling/deploying - this is the real, current resting state for any tcp-listener draft on this branch. All 20 properties match tcp-listener's MirthFieldDefinition.default_value exactly (migration 0050) - sending an empty properties: {} would produce the identical compiled XML via fallback."

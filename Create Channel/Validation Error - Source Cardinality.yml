@@ -1,7 +1,7 @@
 info:
   name: Validation Error - Source Cardinality
   type: http
-  seq: 6
+  seq: 3
 
 http:
   method: POST

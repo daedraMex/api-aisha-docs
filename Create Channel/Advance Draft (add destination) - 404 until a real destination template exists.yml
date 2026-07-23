@@ -1,7 +1,7 @@
 info:
   name: Advance Draft (add destination) - 404 until a real destination template exists
   type: http
-  seq: 5
+  seq: 2
 
 http:
   method: POST

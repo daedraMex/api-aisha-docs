@@ -1,0 +1,50 @@
+info:
+  name: 400 - two source connectors sent (only one allowed)
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "tcp-listener-multi-source-demo",
+        "source": [
+          { "template_codigo": "tcp-listener", "properties": {} },
+          { "template_codigo": "tcp-listener", "properties": { "port": 6662 } }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 400 Bad Request - exactly one source connector required
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+      method: POST
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "source": [
+              "Exactly one source connector is required, got 2."
+            ]
+          }
+
+docs: CreateOrAdvanceChannelSerializer.validate() fail-fasts natively (raise_exception=True -> 400) before the handler ever runs, since exactly one source entry is required.

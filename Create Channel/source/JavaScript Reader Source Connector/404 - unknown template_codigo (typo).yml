@@ -1,0 +1,54 @@
+info:
+  name: 404 - unknown template_codigo (typo)
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "js-reader-typo-demo",
+        "source": [
+          { "template_codigo": "javascript-reader-typo", "properties": {} }
+        ],
+        "destinations": [
+          { "template_codigo": "any-destination-code", "properties": {} }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 404 Not Found - CHANNEL.TEMPLATE_NOT_FOUND
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+      method: POST
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "CHANNEL.TEMPLATE_NOT_FOUND",
+              "message": "No template found with codigo='javascript-reader-typo'. (stage: source)",
+              "details": null
+            }
+          }
+
+docs: "destinations is non-empty (any entry, even one whose template doesn't exist either) purely to pass the `source and destinations` truthiness check and force the handler into _compile_xml - source's bad template_codigo is resolved first, so this is what actually raises. Real code path: DjangoMirthTemplateRepository.get_by_codigo raises MirthTemplateNotFoundError(\"No template found with codigo='javascript-reader-typo'.\"), create_channel_handler appends \"(stage: source)\", and the global mirth_exception_handler maps it to 404."

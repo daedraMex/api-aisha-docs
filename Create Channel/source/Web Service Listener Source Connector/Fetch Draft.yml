@@ -1,7 +1,7 @@
 info:
-  name: Get Channel Draft
+  name: Fetch Draft
   type: http
-  seq: 1
+  seq: 3
 
 http:
   method: GET
@@ -15,7 +15,7 @@ settings:
   maxRedirects: 5
 
 examples:
-  - name: Success - 200 OK
+  - name: 200 OK
     request:
       url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/{{draft_id}}/"
       method: GET
@@ -29,17 +29,31 @@ examples:
         type: json
         data: |-
           {
-            "id": "e1f2a3b4-c5d6-4e7f-8a9b-0c1d2e3f4a5b",
+            "id": "55555555-5555-5555-5555-555555555555",
             "status": "INCOMPLETE",
             "json_data": {
-              "name": "HL7-Ingest-Sede-Norte",
-              "source": [{"template_codigo": "channel-reader", "properties": {"respond_after_processing": true}}]
+              "name": "ws-listener-demo",
+              "description": null,
+              "initial_state": null,
+              "metadata_columns": [],
+              "source": [
+                {
+                  "template_codigo": "web-service-listener",
+                  "properties": {
+                    "port": 8082,
+                    "service_name": "AdmissionsService",
+                    "soap_binding": "SOAP12HTTP",
+                    "queue_buffer_size": 2000
+                  }
+                }
+              ],
+              "destinations": []
             },
             "xml_generated": null
           }
-  - name: Error - 404 Not Found
+  - name: 404 Not Found - draft does not belong to user / does not exist
     request:
-      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/{{draft_id}}/"
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/99999999-9999-9999-9999-999999999999/"
       method: GET
     response:
       status: 404
@@ -58,4 +72,4 @@ examples:
             }
           }
 
-docs: Fetches a draft's current status/json_data/xml_generated so the frontend can resume editing.
+docs: Returns the draft's current status, json_data, and xml_generated (null until the payload is complete enough to compile).

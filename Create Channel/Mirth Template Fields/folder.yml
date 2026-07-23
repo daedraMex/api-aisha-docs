@@ -1,0 +1,7 @@
+info:
+  name: Mirth Template Fields
+  type: folder
+  seq: 7
+
+request:
+  auth: inherit

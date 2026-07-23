@@ -1,0 +1,76 @@
+info:
+  name: Advance Draft - custom service name and SOAP 1.2 binding
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "draft_id": "{{draft_id}}",
+        "name": "ws-listener-demo",
+        "source": [
+          {
+            "template_codigo": "web-service-listener",
+            "properties": {
+              "port": 8082,
+              "service_name": "AdmissionsService",
+              "soap_binding": "SOAP12HTTP",
+              "queue_buffer_size": 2000
+            }
+          }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK - INCOMPLETE (overrides applied, destinations still missing)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+      method: POST
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "55555555-5555-5555-5555-555555555555",
+            "status": "INCOMPLETE",
+            "json_data": {
+              "name": "ws-listener-demo",
+              "description": null,
+              "initial_state": null,
+              "metadata_columns": [],
+              "source": [
+                {
+                  "template_codigo": "web-service-listener",
+                  "properties": {
+                    "port": 8082,
+                    "service_name": "AdmissionsService",
+                    "soap_binding": "SOAP12HTTP",
+                    "queue_buffer_size": 2000
+                  }
+                }
+              ],
+              "destinations": []
+            },
+            "xml_generated": null
+          }
+
+docs: "Same draft_id as the previous request. Only port/service_name/soap_binding/queue_buffer_size are sent - every other web-service-listener field (host, response_variable, class_name, etc.) falls back to its MirthFieldDefinition.default_value via bind_connector_properties, since properties are re-bound from scratch on each call, not merged with the previous submission. Still INCOMPLETE: destinations remains empty. class_name is left at the default DefaultAcceptMessage - a custom accept-message implementation would need its own compiled/deployed Java class on the Mirth server, not something this API can validate."
