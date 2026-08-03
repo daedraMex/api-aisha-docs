@@ -19,7 +19,7 @@ request:
     - name: base_url
       value: http://localhost:8011
     - name: channel_id
-      value: 7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b
+      value: 9e8f89eb-b6db-43f0-95cb-5baec9038745
     - name: message_id
       value: "9"
     - name: user_id

@@ -1,0 +1,61 @@
+info:
+  name: Delete Channel - DELETE /channels/{channel_id}/
+  type: http
+  seq: 10
+
+http:
+  method: DELETE
+  url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 204 No Content - deleted
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/"
+      method: DELETE
+    response:
+      status: 204
+      statusText: No Content
+      body:
+        type: text
+        data: ""
+  - name: 404 Not Found - channel does not exist in Mirth
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/channels/99999999-9999-9999-9999-999999999999/"
+      method: DELETE
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "detail": "The specified channel does not exist in Mirth."
+          }
+  - name: 503 Service Unavailable - Mirth unreachable
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/"
+      method: DELETE
+    response:
+      status: 503
+      statusText: Service Unavailable
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "detail": "Mirth service is unavailable."
+          }
+
+docs: Deletes the channel identified by channel_id from Mirth Connect.
