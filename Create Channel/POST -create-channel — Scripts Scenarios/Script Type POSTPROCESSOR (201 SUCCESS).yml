@@ -1,0 +1,98 @@
+info:
+  name: Script Type POSTPROCESSOR (201 SUCCESS)
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "My Channel Postprocessor",
+        "description": "Integration test channel",
+        "initial_state": "STARTED",
+        "metaDataColumn": [
+          {
+            "name": "PATIENT_ID",
+            "type": "STRING",
+            "mappingName": "mirth_patient_id"
+          }
+        ],
+        "source": [
+          {
+            "template_codigo": "channel-reader",
+            "properties": {
+              "respond_after_processing": true,
+              "queue_buffer_size": 1000,
+              "response_variable": "None",
+              "process_batch": false,
+              "first_response": false,
+              "processing_threads": 1
+            }
+          }
+        ],
+        "destinations": [
+          {
+            "template_codigo": "file-dest",
+            "properties": {
+              "host": "ftp.example.com"
+            }
+          }
+        ],
+        "prune_metadata_days": 30,
+        "prune_content_days": 60,
+        "archive_enabled": true,
+        "script_type": "POSTPROCESSOR",
+        "script_content": "// custom postprocessing\nreturn;"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 201 Created - postprocessingScript bound, other 3 tags at stock defaults
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "My Channel Postprocessor",
+            "description": "Integration test channel",
+            "initial_state": "STARTED",
+            "metaDataColumn": [ { "name": "PATIENT_ID", "type": "STRING", "mappingName": "mirth_patient_id" } ],
+            "source": [ { "template_codigo": "channel-reader", "properties": { "respond_after_processing": true, "queue_buffer_size": 1000, "response_variable": "None", "process_batch": false, "first_response": false, "processing_threads": 1 } } ],
+            "destinations": [ { "template_codigo": "file-dest", "properties": { "host": "ftp.example.com" } } ],
+            "prune_metadata_days": 30,
+            "prune_content_days": 60,
+            "archive_enabled": true,
+            "script_type": "POSTPROCESSOR",
+            "script_content": "// custom postprocessing\nreturn;"
+          }
+    response:
+      status: 201
+      statusText: Created
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "99999999-8888-7777-6666-555555555555",
+            "status": "SUCCESS",
+            "json_data": { "script_type": "POSTPROCESSOR", "script_content": "// custom postprocessing\nreturn;" },
+            "xml_generated": "<channel>...<postprocessingScript>// custom postprocessing\nreturn;</postprocessingScript>...(deployScript/undeployScript/preprocessingScript reset to their own stock defaults)...</channel>"
+          }
+
+docs: script_type=POSTPROCESSOR binds script_content into <postprocessingScript>; the other 3 tags fall back to their own stock defaults.

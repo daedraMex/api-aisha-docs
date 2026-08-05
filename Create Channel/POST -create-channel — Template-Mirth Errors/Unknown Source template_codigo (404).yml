@@ -1,0 +1,74 @@
+info:
+  name: Unknown Source template_codigo (404)
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "My Channel",
+        "description": "Integration test channel",
+        "initial_state": "STARTED",
+        "metaDataColumn": [ { "name": "PATIENT_ID", "type": "STRING", "mappingName": "mirth_patient_id" } ],
+        "source": [ { "template_codigo": "does-not-exist", "properties": {} } ],
+        "destinations": [ { "template_codigo": "file-dest", "properties": { "host": "ftp.example.com" } } ],
+        "prune_metadata_days": 30,
+        "prune_content_days": 60,
+        "archive_enabled": true,
+        "script_type": "DEPLOY",
+        "script_content": "return true;"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 404 Not Found - unknown source template, names code and stage
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "My Channel",
+            "description": "Integration test channel",
+            "initial_state": "STARTED",
+            "metaDataColumn": [ { "name": "PATIENT_ID", "type": "STRING", "mappingName": "mirth_patient_id" } ],
+            "source": [ { "template_codigo": "does-not-exist", "properties": {} } ],
+            "destinations": [ { "template_codigo": "file-dest", "properties": { "host": "ftp.example.com" } } ],
+            "prune_metadata_days": 30,
+            "prune_content_days": 60,
+            "archive_enabled": true,
+            "script_type": "DEPLOY",
+            "script_content": "return true;"
+          }
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "CHANNEL.TEMPLATE_NOT_FOUND",
+              "message": "No template found with code='does-not-exist'. (stage: source)",
+              "details": null
+            }
+          }
+
+docs: A structurally valid payload (passes fail-fast 400 checks) referencing a source template_codigo with no matching MirthTemplate row. MirthTemplateNotFoundError propagates uncaught from the handler to the global mirth_exception_handler (D8c) -- NOT caught inline in the view. No READY/SUCCESS is ever persisted for this draft.

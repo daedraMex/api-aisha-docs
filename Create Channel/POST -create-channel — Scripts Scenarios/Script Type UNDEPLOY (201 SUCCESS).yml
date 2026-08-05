@@ -1,0 +1,123 @@
+info:
+  name: Script Type UNDEPLOY (201 SUCCESS)
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "My Channel Undeploy",
+        "description": "Integration test channel",
+        "initial_state": "STARTED",
+        "metaDataColumn": [
+          {
+            "name": "PATIENT_ID",
+            "type": "STRING",
+            "mappingName": "mirth_patient_id"
+          }
+        ],
+        "source": [
+          {
+            "template_codigo": "channel-reader",
+            "properties": {
+              "respond_after_processing": true,
+              "queue_buffer_size": 1000,
+              "response_variable": "None",
+              "process_batch": false,
+              "first_response": false,
+              "processing_threads": 1
+            }
+          }
+        ],
+        "destinations": [
+          {
+            "template_codigo": "file-dest",
+            "properties": {
+              "host": "ftp.example.com"
+            }
+          }
+        ],
+        "prune_metadata_days": 30,
+        "prune_content_days": 60,
+        "archive_enabled": true,
+        "script_type": "UNDEPLOY",
+        "script_content": "// custom undeploy cleanup\nreturn true;"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 201 Created - undeployScript bound, other 3 tags at stock defaults
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "My Channel Undeploy",
+            "description": "Integration test channel",
+            "initial_state": "STARTED",
+            "metaDataColumn": [
+              {
+                "name": "PATIENT_ID",
+                "type": "STRING",
+                "mappingName": "mirth_patient_id"
+              }
+            ],
+            "source": [
+              {
+                "template_codigo": "channel-reader",
+                "properties": {
+                  "respond_after_processing": true,
+                  "queue_buffer_size": 1000,
+                  "response_variable": "None",
+                  "process_batch": false,
+                  "first_response": false,
+                  "processing_threads": 1
+                }
+              }
+            ],
+            "destinations": [
+              {
+                "template_codigo": "file-dest",
+                "properties": {
+                  "host": "ftp.example.com"
+                }
+              }
+            ],
+            "prune_metadata_days": 30,
+            "prune_content_days": 60,
+            "archive_enabled": true,
+            "script_type": "UNDEPLOY",
+            "script_content": "// custom undeploy cleanup\nreturn true;"
+          }
+    response:
+      status: 201
+      statusText: Created
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "77777777-7777-7777-7777-777777777777",
+            "status": "SUCCESS",
+            "json_data": { "script_type": "UNDEPLOY", "script_content": "// custom undeploy cleanup\nreturn true;" },
+            "xml_generated": "<channel>...<undeployScript>// custom undeploy cleanup\nreturn true;</undeployScript>...(deployScript/preprocessingScript/postprocessingScript reset to their own stock defaults)...</channel>"
+          }
+
+docs: script_type=UNDEPLOY binds script_content into <undeployScript> instead; deployScript/preprocessingScript/postprocessingScript fall back to their own stock defaults.

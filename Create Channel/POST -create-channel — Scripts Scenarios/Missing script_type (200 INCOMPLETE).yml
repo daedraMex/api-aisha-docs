@@ -1,0 +1,121 @@
+info:
+  name: Missing script_type (200 INCOMPLETE)
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "My Channel No Script Type",
+        "description": "Integration test channel",
+        "initial_state": "STARTED",
+        "metaDataColumn": [
+          {
+            "name": "PATIENT_ID",
+            "type": "STRING",
+            "mappingName": "mirth_patient_id"
+          }
+        ],
+        "source": [
+          {
+            "template_codigo": "channel-reader",
+            "properties": {
+              "respond_after_processing": true,
+              "queue_buffer_size": 1000,
+              "response_variable": "None",
+              "process_batch": false,
+              "first_response": false,
+              "processing_threads": 1
+            }
+          }
+        ],
+        "destinations": [
+          {
+            "template_codigo": "file-dest",
+            "properties": {
+              "host": "ftp.example.com"
+            }
+          }
+        ],
+        "prune_metadata_days": 30,
+        "prune_content_days": 60,
+        "archive_enabled": true,
+        "script_content": "return true;"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK - INCOMPLETE, xml_generated null
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "My Channel No Script Type",
+            "description": "Integration test channel",
+            "initial_state": "STARTED",
+            "metaDataColumn": [
+              {
+                "name": "PATIENT_ID",
+                "type": "STRING",
+                "mappingName": "mirth_patient_id"
+              }
+            ],
+            "source": [
+              {
+                "template_codigo": "channel-reader",
+                "properties": {
+                  "respond_after_processing": true,
+                  "queue_buffer_size": 1000,
+                  "response_variable": "None",
+                  "process_batch": false,
+                  "first_response": false,
+                  "processing_threads": 1
+                }
+              }
+            ],
+            "destinations": [
+              {
+                "template_codigo": "file-dest",
+                "properties": {
+                  "host": "ftp.example.com"
+                }
+              }
+            ],
+            "prune_metadata_days": 30,
+            "prune_content_days": 60,
+            "archive_enabled": true,
+            "script_content": "return true;"
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "10101010-1010-1010-1010-101010101010",
+            "status": "INCOMPLETE",
+            "json_data": { "script_type": null, "script_content": "return true;" },
+            "xml_generated": null
+          }
+
+docs: script_type key omitted entirely (as opposed to present-but-invalid, which is a 400). This is a business gap sharing the same INCOMPLETE-gate condition as missing source/destinations/script_content (D9c) -- not a fail-fast error.

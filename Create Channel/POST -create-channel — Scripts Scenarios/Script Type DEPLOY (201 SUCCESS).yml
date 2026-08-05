@@ -1,0 +1,123 @@
+info:
+  name: Script Type DEPLOY (201 SUCCESS)
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "My Channel",
+        "description": "Integration test channel",
+        "initial_state": "STARTED",
+        "metaDataColumn": [
+          {
+            "name": "PATIENT_ID",
+            "type": "STRING",
+            "mappingName": "mirth_patient_id"
+          }
+        ],
+        "source": [
+          {
+            "template_codigo": "channel-reader",
+            "properties": {
+              "respond_after_processing": true,
+              "queue_buffer_size": 1000,
+              "response_variable": "None",
+              "process_batch": false,
+              "first_response": false,
+              "processing_threads": 1
+            }
+          }
+        ],
+        "destinations": [
+          {
+            "template_codigo": "file-dest",
+            "properties": {
+              "host": "ftp.example.com"
+            }
+          }
+        ],
+        "prune_metadata_days": 30,
+        "prune_content_days": 60,
+        "archive_enabled": true,
+        "script_type": "DEPLOY",
+        "script_content": "// PR10c integration test script\nreturn true;"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 201 Created - deployScript bound, other 3 tags at stock defaults
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "My Channel",
+            "description": "Integration test channel",
+            "initial_state": "STARTED",
+            "metaDataColumn": [
+              {
+                "name": "PATIENT_ID",
+                "type": "STRING",
+                "mappingName": "mirth_patient_id"
+              }
+            ],
+            "source": [
+              {
+                "template_codigo": "channel-reader",
+                "properties": {
+                  "respond_after_processing": true,
+                  "queue_buffer_size": 1000,
+                  "response_variable": "None",
+                  "process_batch": false,
+                  "first_response": false,
+                  "processing_threads": 1
+                }
+              }
+            ],
+            "destinations": [
+              {
+                "template_codigo": "file-dest",
+                "properties": {
+                  "host": "ftp.example.com"
+                }
+              }
+            ],
+            "prune_metadata_days": 30,
+            "prune_content_days": 60,
+            "archive_enabled": true,
+            "script_type": "DEPLOY",
+            "script_content": "// PR10c integration test script\nreturn true;"
+          }
+    response:
+      status: 201
+      statusText: Created
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "66666666-6666-6666-6666-666666666666",
+            "status": "SUCCESS",
+            "json_data": { "script_type": "DEPLOY", "script_content": "// PR10c integration test script\nreturn true;" },
+            "xml_generated": "<channel>...<deployScript>// PR10c integration test script\nreturn true;</deployScript><undeployScript>// This script executes once when the channel is undeployed\nreturn;</undeployScript><preprocessingScript>// Modify the message variable below to pre process data\nreturn message;</preprocessingScript><postprocessingScript>// This script executes once after a message has been processed\nreturn;</postprocessingScript>...</channel>"
+          }
+
+docs: script_type=DEPLOY binds script_content into <deployScript>; the other 3 script tags (undeployScript/preprocessingScript/postprocessingScript) are reset to Mirth's own stock default text on every compile, per D9b idempotency.

@@ -1,0 +1,185 @@
+info:
+  name: Mirth Unreachable or Timeout (200 ERROR)
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "My Channel",
+        "description": "Integration test channel",
+        "initial_state": "STARTED",
+        "metaDataColumn": [
+          {
+            "name": "PATIENT_ID",
+            "type": "STRING",
+            "mappingName": "mirth_patient_id"
+          }
+        ],
+        "source": [
+          {
+            "template_codigo": "channel-reader",
+            "properties": {
+              "respond_after_processing": true,
+              "queue_buffer_size": 1000,
+              "response_variable": "None",
+              "process_batch": false,
+              "first_response": false,
+              "processing_threads": 1
+            }
+          }
+        ],
+        "destinations": [
+          {
+            "template_codigo": "file-dest",
+            "properties": {
+              "host": "ftp.example.com"
+            }
+          }
+        ],
+        "prune_metadata_days": 30,
+        "prune_content_days": 60,
+        "archive_enabled": true,
+        "script_type": "DEPLOY",
+        "script_content": "return true;"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK - status=ERROR, fixed 'Mirth unreachable' message, xml_generated retained
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "My Channel",
+            "description": "Integration test channel",
+            "initial_state": "STARTED",
+            "metaDataColumn": [
+              {
+                "name": "PATIENT_ID",
+                "type": "STRING",
+                "mappingName": "mirth_patient_id"
+              }
+            ],
+            "source": [
+              {
+                "template_codigo": "channel-reader",
+                "properties": {
+                  "respond_after_processing": true,
+                  "queue_buffer_size": 1000,
+                  "response_variable": "None",
+                  "process_batch": false,
+                  "first_response": false,
+                  "processing_threads": 1
+                }
+              }
+            ],
+            "destinations": [
+              {
+                "template_codigo": "file-dest",
+                "properties": {
+                  "host": "ftp.example.com"
+                }
+              }
+            ],
+            "prune_metadata_days": 30,
+            "prune_content_days": 60,
+            "archive_enabled": true,
+            "script_type": "DEPLOY",
+            "script_content": "return true;"
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "30303030-3030-3030-3030-303030303030",
+            "status": "ERROR",
+            "json_data": { "name": "My Channel", "script_type": "DEPLOY", "script_content": "return true;" },
+            "xml_generated": "<channel>...</channel>",
+            "error": "Mirth unreachable"
+          }
+  - name: 200 OK - status=ERROR, Mirth responded with a non-2xx/error detail
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "My Channel",
+            "description": "Integration test channel",
+            "initial_state": "STARTED",
+            "metaDataColumn": [
+              {
+                "name": "PATIENT_ID",
+                "type": "STRING",
+                "mappingName": "mirth_patient_id"
+              }
+            ],
+            "source": [
+              {
+                "template_codigo": "channel-reader",
+                "properties": {
+                  "respond_after_processing": true,
+                  "queue_buffer_size": 1000,
+                  "response_variable": "None",
+                  "process_batch": false,
+                  "first_response": false,
+                  "processing_threads": 1
+                }
+              }
+            ],
+            "destinations": [
+              {
+                "template_codigo": "file-dest",
+                "properties": {
+                  "host": "ftp.example.com"
+                }
+              }
+            ],
+            "prune_metadata_days": 30,
+            "prune_content_days": 60,
+            "archive_enabled": true,
+            "script_type": "DEPLOY",
+            "script_content": "return true;"
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "30303030-3030-3030-3030-303030303030",
+            "status": "ERROR",
+            "json_data": { "name": "My Channel", "script_type": "DEPLOY", "script_content": "return true;" },
+            "xml_generated": "<channel>...</channel>",
+            "error": "Mirth error: <illustrative example -- exact text is str(exc) from whatever MirthBaseException subclass the Mirth API response mapped to; not independently verified against a real Mirth deployment>"
+          }
+
+docs: A fully complete payload compiles fine (XML persisted as READY BEFORE the Mirth call, per D7 checkpoint), but the Mirth connection then fails or times out. Unlike DELETE /channels/{id}/, which surfaces this as a raw 503, create-channel's handler catches MirthConnectionException/MirthTimeoutException INSIDE the handler (D8d) and returns a 200-style envelope with status=ERROR -- it never bubbles up as an HTTP error. No retry is attempted.

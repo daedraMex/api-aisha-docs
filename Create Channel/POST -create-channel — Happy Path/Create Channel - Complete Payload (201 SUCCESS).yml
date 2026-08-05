@@ -1,0 +1,106 @@
+info:
+  name: Create Channel - Complete Payload (201 SUCCESS)
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "My Channel",
+        "description": "Integration test channel",
+        "initial_state": "STARTED",
+        "metaDataColumn": [
+          { "name": "PATIENT_ID", "type": "STRING", "mappingName": "mirth_patient_id" }
+        ],
+        "source": [
+          {
+            "template_codigo": "channel-reader",
+            "properties": {
+              "respond_after_processing": true,
+              "queue_buffer_size": 1000,
+              "response_variable": "None",
+              "process_batch": false,
+              "first_response": false,
+              "processing_threads": 1
+            }
+          }
+        ],
+        "destinations": [
+          { "template_codigo": "file-dest", "properties": { "host": "ftp.example.com" } },
+          { "template_codigo": "file-dest", "properties": { "host": "archive.example.com" } }
+        ],
+        "prune_metadata_days": 30,
+        "prune_content_days": 60,
+        "archive_enabled": true,
+        "script_type": "DEPLOY",
+        "script_content": "// PR10c integration test script\nreturn true;"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 201 Created - New draft, SUCCESS (Mirth deploy confirmed)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+      method: POST
+    response:
+      status: 201
+      statusText: Created
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "55555555-5555-5555-5555-555555555555",
+            "status": "SUCCESS",
+            "json_data": {
+              "name": "My Channel",
+              "description": "Integration test channel",
+              "initial_state": "STARTED",
+              "metadata_columns": [ { "name": "PATIENT_ID", "type": "STRING", "mappingName": "mirth_patient_id" } ],
+              "source": { "template_codigo": "channel-reader", "properties": { "respond_after_processing": true, "queue_buffer_size": 1000, "response_variable": "None", "process_batch": false, "first_response": false, "processing_threads": 1 } },
+              "destinations": [
+                { "template_codigo": "file-dest", "properties": { "host": "ftp.example.com" } },
+                { "template_codigo": "file-dest", "properties": { "host": "archive.example.com" } }
+              ],
+              "script_type": "DEPLOY",
+              "script_content": "// PR10c integration test script\nreturn true;"
+            },
+            "xml_generated": "<channel version=\"4.4.2\">...<id>55555555-5555-5555-5555-555555555555</id><name>My Channel</name><description>Integration test channel</description><sourceConnector>...</sourceConnector><destinationConnectors>...</destinationConnectors><preprocessingScript>// Modify the message variable below to pre process data\nreturn message;</preprocessingScript><postprocessingScript>// This script executes once after a message has been processed\nreturn;</postprocessingScript><deployScript>// PR10c integration test script\nreturn true;</deployScript><undeployScript>// This script executes once when the channel is undeployed\nreturn;</undeployScript><properties><initialState>STARTED</initialState><metaDataColumns>...</metaDataColumns></properties><exportData><metadata><pruningSettings><pruneMetaDataDays>30</pruneMetaDataDays><pruneContentDays>60</pruneContentDays><archiveEnabled>true</archiveEnabled></pruningSettings></metadata></exportData></channel>"
+          }
+  - name: 409 Conflict - channel name already exists (no draft_id)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+      method: POST
+    response:
+      status: 409
+      statusText: Conflict
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "CHANNEL.NAME_EXISTS",
+              "message": "You already have a channel with that name.",
+              "details": null
+            }
+          }
+
+docs: "Full payload: base fields + 1 source connector (template_codigo=channel-reader) + 2 destination connectors (N destinations, template_codigo=file-dest each, payload order preserved) + 1 metaDataColumn entry + pruning settings + a valid script_type/script_content pair. No draft_id -> creates a brand new draft and, since the payload is already complete, compiles + deploys in the same call. template_codigo values (channel-reader/file-dest) are the exact codes used by this repo's own integration test fixtures (test_create_channel_view.py), guaranteed to resolve against a seeded MirthTemplate."

@@ -1,7 +1,0 @@
-info:
-  name: Channel Reader
-  type: folder
-  seq: 1
-
-request:
-  auth: inherit

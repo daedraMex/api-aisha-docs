@@ -1,0 +1,136 @@
+info:
+  name: List all templates (source, destination, base)
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{base_url}}/api/v1/integration-engine/templates/"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK - full catalog
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/templates/"
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          [
+            {
+              "id": "883909e4-e6ee-4e9a-ab24-5c90f6a22e8a",
+              "code": "web-service-sender",
+              "component_type": "DESTINATION_CONNECTOR",
+              "is_active": true
+            },
+            {
+              "id": "e123e1c8-87f7-4699-8e69-d85aa9b4c661",
+              "code": "smtp-sender",
+              "component_type": "DESTINATION_CONNECTOR",
+              "is_active": true
+            },
+            {
+              "id": "1951078a-0029-4593-87ec-e81c799ccd91",
+              "code": "javascript-writer",
+              "component_type": "DESTINATION_CONNECTOR",
+              "is_active": true
+            },
+            {
+              "id": "fed964e6-53d6-44f6-ab84-4517198b74a9",
+              "code": "file-writer",
+              "component_type": "DESTINATION_CONNECTOR",
+              "is_active": true
+            },
+            {
+              "id": "d07e5b32-2043-4840-933b-ca89e64f65a4",
+              "code": "document-writer",
+              "component_type": "DESTINATION_CONNECTOR",
+              "is_active": true
+            },
+            {
+              "id": "ca367e41-6b29-48be-855d-e606b03d045b",
+              "code": "database-writer",
+              "component_type": "DESTINATION_CONNECTOR",
+              "is_active": true
+            },
+            {
+              "id": "84b7afd1-2bcf-41f6-912e-a47626a5fd94",
+              "code": "dicom-sender",
+              "component_type": "DESTINATION_CONNECTOR",
+              "is_active": true
+            },
+            {
+              "id": "b062e408-90ed-46ac-8388-71a2d149939c",
+              "code": "channel-writer",
+              "component_type": "DESTINATION_CONNECTOR",
+              "is_active": true
+            },
+            {
+              "id": "1a74ed9a-b2a7-46c4-a0b0-5d87ad671b65",
+              "code": "web-service-listener",
+              "component_type": "SOURCE_CONNECTOR",
+              "is_active": true
+            },
+            {
+              "id": "7e489228-a35d-491a-a844-6cb941876d38",
+              "code": "tcp-listener",
+              "component_type": "SOURCE_CONNECTOR",
+              "is_active": true
+            },
+            {
+              "id": "096d576d-775b-449d-aa6b-d94559e688d0",
+              "code": "javascript-reader",
+              "component_type": "SOURCE_CONNECTOR",
+              "is_active": true
+            },
+            {
+              "id": "d392d3f3-5028-42d6-94c9-e2fb9a21e8ff",
+              "code": "http-listener",
+              "component_type": "SOURCE_CONNECTOR",
+              "is_active": true
+            },
+            {
+              "id": "f55527b2-db98-485f-98c8-240d16624199",
+              "code": "file-reader",
+              "component_type": "SOURCE_CONNECTOR",
+              "is_active": true
+            },
+            {
+              "id": "ce08a9ce-1a8a-47c4-a7e5-b93b0a50fc6e",
+              "code": "database-reader",
+              "component_type": "SOURCE_CONNECTOR",
+              "is_active": true
+            },
+            {
+              "id": "0e28e598-388c-4f6f-8e55-149da8ee7ad8",
+              "code": "dicom-listener",
+              "component_type": "SOURCE_CONNECTOR",
+              "is_active": true
+            },
+            {
+              "id": "5b482d8c-e74d-4aa3-b454-b5804047b153",
+              "code": "channel-reader",
+              "component_type": "SOURCE_CONNECTOR",
+              "is_active": true
+            },
+            {
+              "id": "3817aa08-ac15-4793-83e8-0af5da0ff03d",
+              "code": "canal-base",
+              "component_type": "BASE_CHANNEL",
+              "is_active": true
+            }
+          ]
+
+docs: "Returns EVERY stored template regardless of type - there is no ?component_type= query param, GetMirthTemplatesQuery takes no filters and the handler always calls repository.get_all(). To get only source connectors, only destination connectors, or the base channel, filter client-side on each item's component_type field: 'SOURCE_CONNECTOR', 'DESTINATION_CONNECTOR', or 'BASE_CHANNEL' (exact enum values, confirmed in presentation/api/plantillas/serializers.py). Use the 'code' of any SOURCE_CONNECTOR/DESTINATION_CONNECTOR entry as the template_codigo in POST /create-channel's source/destinations, and as the {code} path param in GET /templates/{code}/fields/ below to see its configurable fields."

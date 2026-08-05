@@ -1,0 +1,78 @@
+info:
+  name: Two Source Connectors (400)
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "My Channel",
+        "description": "Integration test channel",
+        "initial_state": "STARTED",
+        "metaDataColumn": [ { "name": "PATIENT_ID", "type": "STRING", "mappingName": "mirth_patient_id" } ],
+        "source": [
+          { "template_codigo": "channel-reader", "properties": {} },
+          { "template_codigo": "channel-reader", "properties": {} }
+        ],
+        "destinations": [ { "template_codigo": "file-dest", "properties": { "host": "ftp.example.com" } } ],
+        "prune_metadata_days": 30,
+        "prune_content_days": 60,
+        "archive_enabled": true,
+        "script_type": "DEPLOY",
+        "script_content": "// PR10c integration test script\nreturn true;"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 400 Bad Request - source cardinality (2 entries)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "My Channel",
+            "description": "Integration test channel",
+            "initial_state": "STARTED",
+            "metaDataColumn": [ { "name": "PATIENT_ID", "type": "STRING", "mappingName": "mirth_patient_id" } ],
+            "source": [
+              { "template_codigo": "channel-reader", "properties": {} },
+              { "template_codigo": "channel-reader", "properties": {} }
+            ],
+            "destinations": [ { "template_codigo": "file-dest", "properties": { "host": "ftp.example.com" } } ],
+            "prune_metadata_days": 30,
+            "prune_content_days": 60,
+            "archive_enabled": true,
+            "script_type": "DEPLOY",
+            "script_content": "// PR10c integration test script\nreturn true;"
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "source": [
+              "Exactly one source connector is required, got 2."
+            ]
+          }
+
+docs: source is modeled as a list for wire-contract symmetry with destinations, but exactly one entry is required; 2+ entries is a structural cardinality violation, same fail-fast 400 tier as 0 entries.

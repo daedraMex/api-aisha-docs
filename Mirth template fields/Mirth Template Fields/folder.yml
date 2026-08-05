@@ -1,7 +1,7 @@
 info:
-  name: SMTP Destinations
+  name: Mirth Template Fields
   type: folder
-  seq: 9
+  seq: 1
 
 request:
   auth: inherit

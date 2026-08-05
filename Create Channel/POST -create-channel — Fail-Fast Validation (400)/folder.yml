@@ -1,0 +1,7 @@
+info:
+  name: POST /create-channel — Fail-Fast Validation (400)
+  type: folder
+  seq: 1
+
+request:
+  auth: inherit

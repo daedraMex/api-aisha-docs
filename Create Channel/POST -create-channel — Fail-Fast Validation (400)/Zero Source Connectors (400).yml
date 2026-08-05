@@ -1,0 +1,72 @@
+info:
+  name: Zero Source Connectors (400)
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "My Channel",
+        "description": "Integration test channel",
+        "initial_state": "STARTED",
+        "metaDataColumn": [ { "name": "PATIENT_ID", "type": "STRING", "mappingName": "mirth_patient_id" } ],
+        "source": [],
+        "destinations": [ { "template_codigo": "file-dest", "properties": { "host": "ftp.example.com" } } ],
+        "prune_metadata_days": 30,
+        "prune_content_days": 60,
+        "archive_enabled": true,
+        "script_type": "DEPLOY",
+        "script_content": "// PR10c integration test script\nreturn true;"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 400 Bad Request - source cardinality (0 entries)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "My Channel",
+            "description": "Integration test channel",
+            "initial_state": "STARTED",
+            "metaDataColumn": [ { "name": "PATIENT_ID", "type": "STRING", "mappingName": "mirth_patient_id" } ],
+            "source": [],
+            "destinations": [ { "template_codigo": "file-dest", "properties": { "host": "ftp.example.com" } } ],
+            "prune_metadata_days": 30,
+            "prune_content_days": 60,
+            "archive_enabled": true,
+            "script_type": "DEPLOY",
+            "script_content": "// PR10c integration test script\nreturn true;"
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "source": [
+              "Exactly one source connector is required, got 0."
+            ]
+          }
+
+docs: "source: [] is a structural cardinality violation (explicitly sent empty array, as opposed to omitting the key entirely) -> fails fast with 400 BEFORE any pipeline stage runs, per spec's Fail-Fast Structural Validation requirement. Runs via serializer.is_valid(raise_exception=True), so the body is DRF's native field-error shape, NOT the {error:{code,message,details}} envelope used elsewhere in this API."

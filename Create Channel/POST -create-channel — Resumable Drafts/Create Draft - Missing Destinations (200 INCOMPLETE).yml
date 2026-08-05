@@ -1,0 +1,90 @@
+info:
+  name: Create Draft - Missing Destinations (200 INCOMPLETE)
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "My Channel",
+        "description": "Integration test channel",
+        "initial_state": "STARTED",
+        "metaDataColumn": [
+          { "name": "PATIENT_ID", "type": "STRING", "mappingName": "mirth_patient_id" }
+        ],
+        "source": [
+          { "template_codigo": "channel-reader", "properties": { "respond_after_processing": true, "queue_buffer_size": 1000, "response_variable": "None", "process_batch": false, "first_response": false, "processing_threads": 1 } }
+        ],
+        "destinations": [],
+        "prune_metadata_days": 30,
+        "prune_content_days": 60,
+        "archive_enabled": true,
+        "script_type": "DEPLOY",
+        "script_content": "// PR10c integration test script\nreturn true;"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK - INCOMPLETE, draft id returned, xml_generated null
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "My Channel",
+            "description": "Integration test channel",
+            "initial_state": "STARTED",
+            "metaDataColumn": [
+              { "name": "PATIENT_ID", "type": "STRING", "mappingName": "mirth_patient_id" }
+            ],
+            "source": [
+              { "template_codigo": "channel-reader", "properties": { "respond_after_processing": true, "queue_buffer_size": 1000, "response_variable": "None", "process_batch": false, "first_response": false, "processing_threads": 1 } }
+            ],
+            "destinations": [],
+            "prune_metadata_days": 30,
+            "prune_content_days": 60,
+            "archive_enabled": true,
+            "script_type": "DEPLOY",
+            "script_content": "// PR10c integration test script\nreturn true;"
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "44444444-4444-4444-4444-444444444444",
+            "status": "INCOMPLETE",
+            "json_data": {
+              "name": "My Channel",
+              "description": "Integration test channel",
+              "initial_state": "STARTED",
+              "metadata_columns": [ { "name": "PATIENT_ID", "type": "STRING", "mappingName": "mirth_patient_id" } ],
+              "source": { "template_codigo": "channel-reader", "properties": { "respond_after_processing": true, "queue_buffer_size": 1000, "response_variable": "None", "process_batch": false, "first_response": false, "processing_threads": 1 } },
+              "destinations": [],
+              "script_type": "DEPLOY",
+              "script_content": "// PR10c integration test script\nreturn true;"
+            },
+            "xml_generated": null
+          }
+
+docs: "destinations: [] is structurally valid (an empty array is not a cardinality violation, unlike source) but business-incomplete: the handler persists status=INCOMPLETE and returns the new draft's id for a later resuming call, instead of compiling XML."

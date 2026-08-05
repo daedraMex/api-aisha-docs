@@ -1,7 +1,0 @@
-info:
-  name: TCP Listener Source Connector
-  type: folder
-  seq: 12
-
-request:
-  auth: inherit
