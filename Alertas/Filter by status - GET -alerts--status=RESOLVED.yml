@@ -1,7 +1,7 @@
 info:
   name: Filter by status - GET /alerts/?status=RESOLVED
   type: http
-  seq: 3
+  seq: 5
 
 http:
   method: GET
