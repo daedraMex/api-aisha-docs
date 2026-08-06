@@ -16,14 +16,34 @@ http:
         "name": "My Channel",
         "description": "Integration test channel",
         "initial_state": "STARTED",
-        "metaDataColumn": [ { "name": "PATIENT_ID", "type": "STRING", "mappingName": "mirth_patient_id" } ],
-        "source": [ { "template_codigo": "does-not-exist", "properties": {} } ],
-        "destinations": [ { "template_codigo": "file-dest", "properties": { "host": "ftp.example.com" } } ],
+        "metaDataColumn": [
+          {
+            "name": "PATIENT_ID",
+            "type": "STRING",
+            "mappingName": "mirth_patient_id"
+          }
+        ],
+        "source": [
+          {
+            "template_codigo": "does-not-exist",
+            "properties": {}
+          }
+        ],
+        "destinations": [
+          {
+            "template_codigo": "file-dest",
+            "properties": {
+              "host": "ftp.example.com"
+            }
+          }
+        ],
         "prune_metadata_days": 30,
         "prune_content_days": 60,
         "archive_enabled": true,
-        "script_type": "DEPLOY",
-        "script_content": "return true;"
+        "script": {
+          "script_type": "DEPLOY",
+          "script_content": "return true;"
+        }
       }
   auth: inherit
 
@@ -45,14 +65,34 @@ examples:
             "name": "My Channel",
             "description": "Integration test channel",
             "initial_state": "STARTED",
-            "metaDataColumn": [ { "name": "PATIENT_ID", "type": "STRING", "mappingName": "mirth_patient_id" } ],
-            "source": [ { "template_codigo": "does-not-exist", "properties": {} } ],
-            "destinations": [ { "template_codigo": "file-dest", "properties": { "host": "ftp.example.com" } } ],
+            "metaDataColumn": [
+              {
+                "name": "PATIENT_ID",
+                "type": "STRING",
+                "mappingName": "mirth_patient_id"
+              }
+            ],
+            "source": [
+              {
+                "template_codigo": "does-not-exist",
+                "properties": {}
+              }
+            ],
+            "destinations": [
+              {
+                "template_codigo": "file-dest",
+                "properties": {
+                  "host": "ftp.example.com"
+                }
+              }
+            ],
             "prune_metadata_days": 30,
             "prune_content_days": 60,
             "archive_enabled": true,
-            "script_type": "DEPLOY",
-            "script_content": "return true;"
+            "script": {
+              "script_type": "DEPLOY",
+              "script_content": "return true;"
+            }
           }
     response:
       status: 404

@@ -17,7 +17,11 @@ http:
         "description": "Integration test channel",
         "initial_state": "STARTED",
         "metaDataColumn": [
-          { "name": "PATIENT_ID", "type": "STRING", "mappingName": "mirth_patient_id" }
+          {
+            "name": "PATIENT_ID",
+            "type": "STRING",
+            "mappingName": "mirth_patient_id"
+          }
         ],
         "source": [
           {
@@ -33,14 +37,26 @@ http:
           }
         ],
         "destinations": [
-          { "template_codigo": "file-dest", "properties": { "host": "ftp.example.com" } },
-          { "template_codigo": "file-dest", "properties": { "host": "archive.example.com" } }
+          {
+            "template_codigo": "file-dest",
+            "properties": {
+              "host": "ftp.example.com"
+            }
+          },
+          {
+            "template_codigo": "file-dest",
+            "properties": {
+              "host": "archive.example.com"
+            }
+          }
         ],
         "prune_metadata_days": 30,
         "prune_content_days": 60,
         "archive_enabled": true,
-        "script_type": "DEPLOY",
-        "script_content": "// PR10c integration test script\nreturn true;"
+        "script": {
+          "script_type": "DEPLOY",
+          "script_content": "// PR10c integration test script\nreturn true;"
+        }
       }
   auth: inherit
 
@@ -55,6 +71,55 @@ examples:
     request:
       url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
       method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "My Channel",
+            "description": "Integration test channel",
+            "initial_state": "STARTED",
+            "metaDataColumn": [
+              {
+                "name": "PATIENT_ID",
+                "type": "STRING",
+                "mappingName": "mirth_patient_id"
+              }
+            ],
+            "source": [
+              {
+                "template_codigo": "channel-reader",
+                "properties": {
+                  "respond_after_processing": true,
+                  "queue_buffer_size": 1000,
+                  "response_variable": "None",
+                  "process_batch": false,
+                  "first_response": false,
+                  "processing_threads": 1
+                }
+              }
+            ],
+            "destinations": [
+              {
+                "template_codigo": "file-dest",
+                "properties": {
+                  "host": "ftp.example.com"
+                }
+              },
+              {
+                "template_codigo": "file-dest",
+                "properties": {
+                  "host": "archive.example.com"
+                }
+              }
+            ],
+            "prune_metadata_days": 30,
+            "prune_content_days": 60,
+            "archive_enabled": true,
+            "script": {
+              "script_type": "DEPLOY",
+              "script_content": "// PR10c integration test script\nreturn true;"
+            }
+          }
     response:
       status: 201
       statusText: Created
@@ -86,6 +151,55 @@ examples:
     request:
       url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
       method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "My Channel",
+            "description": "Integration test channel",
+            "initial_state": "STARTED",
+            "metaDataColumn": [
+              {
+                "name": "PATIENT_ID",
+                "type": "STRING",
+                "mappingName": "mirth_patient_id"
+              }
+            ],
+            "source": [
+              {
+                "template_codigo": "channel-reader",
+                "properties": {
+                  "respond_after_processing": true,
+                  "queue_buffer_size": 1000,
+                  "response_variable": "None",
+                  "process_batch": false,
+                  "first_response": false,
+                  "processing_threads": 1
+                }
+              }
+            ],
+            "destinations": [
+              {
+                "template_codigo": "file-dest",
+                "properties": {
+                  "host": "ftp.example.com"
+                }
+              },
+              {
+                "template_codigo": "file-dest",
+                "properties": {
+                  "host": "archive.example.com"
+                }
+              }
+            ],
+            "prune_metadata_days": 30,
+            "prune_content_days": 60,
+            "archive_enabled": true,
+            "script": {
+              "script_type": "DEPLOY",
+              "script_content": "// PR10c integration test script\nreturn true;"
+            }
+          }
     response:
       status: 409
       statusText: Conflict
@@ -103,4 +217,4 @@ examples:
             }
           }
 
-docs: "Full payload: base fields + 1 source connector (template_codigo=channel-reader) + 2 destination connectors (N destinations, template_codigo=file-dest each, payload order preserved) + 1 metaDataColumn entry + pruning settings + a valid script_type/script_content pair. No draft_id -> creates a brand new draft and, since the payload is already complete, compiles + deploys in the same call. template_codigo values (channel-reader/file-dest) are the exact codes used by this repo's own integration test fixtures (test_create_channel_view.py), guaranteed to resolve against a seeded MirthTemplate."
+docs: "Full payload: base fields + 1 source connector (template_codigo=channel-reader) + 2 destination connectors (N destinations, template_codigo=file-dest each, payload order preserved) + 1 metaDataColumn entry + pruning settings + a complete `script` object (script_type/script_content nested). No draft_id -> creates a brand new draft and, since the payload is already complete, compiles + deploys in the same call. template_codigo values (channel-reader/file-dest) are the exact codes used by this repo's own integration test fixtures (test_create_channel_view.py), guaranteed to resolve against a seeded MirthTemplate."

@@ -1,7 +1,7 @@
 info:
-  name: Missing script_content (200 INCOMPLETE)
+  name: Missing script Object Entirely (200 INCOMPLETE)
   type: http
-  seq: 6
+  seq: 5
 
 http:
   method: POST
@@ -13,7 +13,7 @@ http:
     type: json
     data: |-
       {
-        "name": "My Channel No Script Content",
+        "name": "My Channel No Script",
         "description": "Integration test channel",
         "initial_state": "STARTED",
         "metaDataColumn": [
@@ -46,8 +46,7 @@ http:
         ],
         "prune_metadata_days": 30,
         "prune_content_days": 60,
-        "archive_enabled": true,
-        "script_type": "DEPLOY"
+        "archive_enabled": true
       }
   auth: inherit
 
@@ -66,7 +65,7 @@ examples:
         type: json
         data: |-
           {
-            "name": "My Channel No Script Content",
+            "name": "My Channel No Script",
             "description": "Integration test channel",
             "initial_state": "STARTED",
             "metaDataColumn": [
@@ -99,8 +98,7 @@ examples:
             ],
             "prune_metadata_days": 30,
             "prune_content_days": 60,
-            "archive_enabled": true,
-            "script_type": "DEPLOY"
+            "archive_enabled": true
           }
     response:
       status: 200
@@ -112,10 +110,10 @@ examples:
         type: json
         data: |-
           {
-            "id": "20202020-2020-2020-2020-202020202020",
+            "id": "10101010-1010-1010-1010-101010101010",
             "status": "INCOMPLETE",
-            "json_data": { "script_type": "DEPLOY", "script_content": null },
+            "json_data": { "script_type": null, "script_content": null },
             "xml_generated": null
           }
 
-docs: "A valid script_type is present but script_content key is absent entirely (not present-as-empty-string). Same INCOMPLETE tier as a missing script_type -- explicitly NOT a 400, per spec's resolved note #4."
+docs: "The `script` key omitted entirely (as opposed to present-but-incomplete, which is a 400 - see 'script Present but Missing script_content' below). This is a business gap sharing the same INCOMPLETE-gate condition as missing source/destinations (D9c) -- not a fail-fast error. Sending `script: null` explicitly produces the identical result (the outer field is `allow_null=True`)."

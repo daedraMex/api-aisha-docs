@@ -45,8 +45,10 @@ http:
         "prune_metadata_days": 30,
         "prune_content_days": 60,
         "archive_enabled": true,
-        "script_type": "DEPLOY",
-        "script_content": "return true;"
+        "script": {
+          "script_type": "DEPLOY",
+          "script_content": "return true;"
+        }
       }
   auth: inherit
 
@@ -97,8 +99,10 @@ examples:
             "prune_metadata_days": 30,
             "prune_content_days": 60,
             "archive_enabled": true,
-            "script_type": "DEPLOY",
-            "script_content": "return true;"
+            "script": {
+              "script_type": "DEPLOY",
+              "script_content": "return true;"
+            }
           }
     response:
       status: 404

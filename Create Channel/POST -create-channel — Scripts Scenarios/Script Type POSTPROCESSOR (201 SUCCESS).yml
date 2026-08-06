@@ -47,8 +47,10 @@ http:
         "prune_metadata_days": 30,
         "prune_content_days": 60,
         "archive_enabled": true,
-        "script_type": "POSTPROCESSOR",
-        "script_content": "// custom postprocessing\nreturn;"
+        "script": {
+          "script_type": "POSTPROCESSOR",
+          "script_content": "// custom postprocessing\nreturn;"
+        }
       }
   auth: inherit
 
@@ -70,14 +72,41 @@ examples:
             "name": "My Channel Postprocessor",
             "description": "Integration test channel",
             "initial_state": "STARTED",
-            "metaDataColumn": [ { "name": "PATIENT_ID", "type": "STRING", "mappingName": "mirth_patient_id" } ],
-            "source": [ { "template_codigo": "channel-reader", "properties": { "respond_after_processing": true, "queue_buffer_size": 1000, "response_variable": "None", "process_batch": false, "first_response": false, "processing_threads": 1 } } ],
-            "destinations": [ { "template_codigo": "file-dest", "properties": { "host": "ftp.example.com" } } ],
+            "metaDataColumn": [
+              {
+                "name": "PATIENT_ID",
+                "type": "STRING",
+                "mappingName": "mirth_patient_id"
+              }
+            ],
+            "source": [
+              {
+                "template_codigo": "channel-reader",
+                "properties": {
+                  "respond_after_processing": true,
+                  "queue_buffer_size": 1000,
+                  "response_variable": "None",
+                  "process_batch": false,
+                  "first_response": false,
+                  "processing_threads": 1
+                }
+              }
+            ],
+            "destinations": [
+              {
+                "template_codigo": "file-dest",
+                "properties": {
+                  "host": "ftp.example.com"
+                }
+              }
+            ],
             "prune_metadata_days": 30,
             "prune_content_days": 60,
             "archive_enabled": true,
-            "script_type": "POSTPROCESSOR",
-            "script_content": "// custom postprocessing\nreturn;"
+            "script": {
+              "script_type": "POSTPROCESSOR",
+              "script_content": "// custom postprocessing\nreturn;"
+            }
           }
     response:
       status: 201

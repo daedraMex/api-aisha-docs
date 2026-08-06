@@ -16,14 +16,34 @@ http:
         "name": "My Channel",
         "description": "Integration test channel",
         "initial_state": "STARTED",
-        "metaDataColumn": [ { "name": "PATIENT_ID", "type": "STRING", "mappingName": "mirth_patient_id" } ],
-        "source": [ { "template_codigo": "channel-reader", "properties": {} } ],
-        "destinations": [ { "template_codigo": "file-dest", "properties": { "host": "ftp.example.com" } } ],
+        "metaDataColumn": [
+          {
+            "name": "PATIENT_ID",
+            "type": "STRING",
+            "mappingName": "mirth_patient_id"
+          }
+        ],
+        "source": [
+          {
+            "template_codigo": "channel-reader",
+            "properties": {}
+          }
+        ],
+        "destinations": [
+          {
+            "template_codigo": "file-dest",
+            "properties": {
+              "host": "ftp.example.com"
+            }
+          }
+        ],
         "prune_metadata_days": 30,
         "prune_content_days": 60,
         "archive_enabled": true,
-        "script_type": "NOT_A_TYPE",
-        "script_content": "return true;"
+        "script": {
+          "script_type": "NOT_A_TYPE",
+          "script_content": "return true;"
+        }
       }
   auth: inherit
 
@@ -51,8 +71,10 @@ examples:
             "prune_metadata_days": 30,
             "prune_content_days": 60,
             "archive_enabled": true,
-            "script_type": "NOT_A_TYPE",
-            "script_content": "return true;"
+            "script": {
+              "script_type": "NOT_A_TYPE",
+              "script_content": "return true;"
+            }
           }
     response:
       status: 400
@@ -64,9 +86,11 @@ examples:
         type: json
         data: |-
           {
-            "script_type": [
-              "\"NOT_A_TYPE\" is not a valid choice."
-            ]
+            "script": {
+              "script_type": [
+                "\"NOT_A_TYPE\" is not a valid choice."
+              ]
+            }
           }
 
-docs: script_type is a ChoiceField over CHANNEL_SCRIPT_VALID_TYPES (DEPLOY/UNDEPLOY/PREPROCESSOR/POSTPROCESSOR). Present but out-of-enum -> fail-fast 400, same tier as invalid metaDataColumn.type. Contrast with a MISSING script_type, which is a business gap (INCOMPLETE, see Scripts Scenarios folder), not a 400.
+docs: script_type is a ChoiceField over CHANNEL_SCRIPT_VALID_TYPES (DEPLOY/UNDEPLOY/PREPROCESSOR/POSTPROCESSOR), nested inside the `script` object. Present but out-of-enum -> fail-fast 400, same tier as invalid metaDataColumn.type. Contrast with an entirely missing `script` object, which is a business gap (INCOMPLETE, see 'Missing script Object Entirely' in the Scripts Scenarios folder) - not a 400. A `script` object present but missing `script_content` is ALSO a 400 (see 'script Present but Missing script_content' in Scripts Scenarios), because both inner fields are required once the outer key is present.

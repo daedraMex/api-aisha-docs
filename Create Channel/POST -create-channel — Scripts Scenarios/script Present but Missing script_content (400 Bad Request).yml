@@ -1,7 +1,7 @@
 info:
-  name: Zero Source Connectors (400)
+  name: script Present but Missing script_content (400 Bad Request)
   type: http
-  seq: 1
+  seq: 6
 
 http:
   method: POST
@@ -13,18 +13,17 @@ http:
     type: json
     data: |-
       {
-        "name": "My Channel",
+        "name": "My Channel No Script Content",
         "description": "Integration test channel",
         "initial_state": "STARTED",
         "metaDataColumn": [ { "name": "PATIENT_ID", "type": "STRING", "mappingName": "mirth_patient_id" } ],
-        "source": [],
+        "source": [ { "template_codigo": "channel-reader", "properties": { "respond_after_processing": true, "queue_buffer_size": 1000, "response_variable": "None", "process_batch": false, "first_response": false, "processing_threads": 1 } } ],
         "destinations": [ { "template_codigo": "file-dest", "properties": { "host": "ftp.example.com" } } ],
         "prune_metadata_days": 30,
         "prune_content_days": 60,
         "archive_enabled": true,
         "script": {
-          "script_type": "DEPLOY",
-          "script_content": "// PR10c integration test script\nreturn true;"
+          "script_type": "DEPLOY"
         }
       }
   auth: inherit
@@ -36,7 +35,7 @@ settings:
   maxRedirects: 5
 
 examples:
-  - name: 400 Bad Request - source cardinality (0 entries)
+  - name: 400 Bad Request - script.script_content required
     request:
       url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/create-channel/"
       method: POST
@@ -44,18 +43,17 @@ examples:
         type: json
         data: |-
           {
-            "name": "My Channel",
+            "name": "My Channel No Script Content",
             "description": "Integration test channel",
             "initial_state": "STARTED",
             "metaDataColumn": [ { "name": "PATIENT_ID", "type": "STRING", "mappingName": "mirth_patient_id" } ],
-            "source": [],
+            "source": [ { "template_codigo": "channel-reader", "properties": { "respond_after_processing": true, "queue_buffer_size": 1000, "response_variable": "None", "process_batch": false, "first_response": false, "processing_threads": 1 } } ],
             "destinations": [ { "template_codigo": "file-dest", "properties": { "host": "ftp.example.com" } } ],
             "prune_metadata_days": 30,
             "prune_content_days": 60,
             "archive_enabled": true,
             "script": {
-              "script_type": "DEPLOY",
-              "script_content": "// PR10c integration test script\nreturn true;"
+              "script_type": "DEPLOY"
             }
           }
     response:
@@ -68,9 +66,11 @@ examples:
         type: json
         data: |-
           {
-            "source": [
-              "Exactly one source connector is required, got 0."
-            ]
+            "script": {
+              "script_content": [
+                "This field is required."
+              ]
+            }
           }
 
-docs: "source: [] is a structural cardinality violation (explicitly sent empty array, as opposed to omitting the key entirely) -> fails fast with 400 BEFORE any pipeline stage runs, per spec's Fail-Fast Structural Validation requirement. Runs via serializer.is_valid(raise_exception=True), so the body is DRF's native field-error shape, NOT the {error:{code,message,details}} envelope used elsewhere in this API."
+docs: The `script` object is present but its inner `script_content` key is absent. Unlike the old flat wire shape (where this used to be a business-gap INCOMPLETE), `ScriptEntrySerializer.script_content` is `required=True` WITHIN the nested object - only the OUTER `script` key is optional/nullable. DRF rejects an incomplete-but-present `script` object as structurally invalid (400) before the view/handler ever runs.
