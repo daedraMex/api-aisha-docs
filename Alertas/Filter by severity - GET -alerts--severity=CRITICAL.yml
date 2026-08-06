@@ -1,0 +1,81 @@
+info:
+  name: Filter by severity - GET /alerts/?severity=CRITICAL
+  type: http
+  seq: 3
+
+http:
+  method: GET
+  url: "{{base_url}}/api/v1/integration-engine/alerts/?severity=CRITICAL"
+  params:
+    - name: severity
+      value: CRITICAL
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK - only CRITICAL
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alerts/?severity=CRITICAL"
+      method: GET
+      params:
+        - name: severity
+          value: CRITICAL
+          type: query
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "page": 1,
+            "page_size": 20,
+            "total": 1,
+            "has_next": false,
+            "has_previous": false,
+            "data": [
+              {
+                "id": "2",
+                "started_at": "2026-06-30T02:12:00+00:00",
+                "severity": "CRITICAL",
+                "channel_id": "11111111-1111-1111-1111-111111111111",
+                "channel_name": "worklistSAAS",
+                "message": "Sin conexión con el motor de integración",
+                "status": "ACTIVE",
+                "duration_seconds": null
+              }
+            ]
+          }
+  - name: 400 Bad Request - invalid severity
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alerts/?severity=BANANA"
+      method: GET
+      params:
+        - name: severity
+          value: BANANA
+          type: query
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "severity": [
+              "\"BANANA\" is not a valid choice."
+            ]
+          }
+
+docs: "severity: CRITICAL | WARNING | INFO"
