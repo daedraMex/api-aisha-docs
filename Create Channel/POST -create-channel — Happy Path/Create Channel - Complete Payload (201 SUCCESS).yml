@@ -13,16 +13,9 @@ http:
     type: json
     data: |-
       {
-        "name": "My Channel",
-        "description": "Integration test channel",
+        "name": "Creacion manual canal 2",
+        "description": "Ejemplo de canal",
         "initial_state": "STARTED",
-        "metaDataColumn": [
-          {
-            "name": "PATIENT_ID",
-            "type": "STRING",
-            "mappingName": "mirth_patient_id"
-          }
-        ],
         "source": [
           {
             "template_codigo": "channel-reader",
@@ -38,25 +31,18 @@ http:
         ],
         "destinations": [
           {
-            "template_codigo": "file-dest",
+            "template_codigo": "channel-writer",
             "properties": {
-              "host": "ftp.example.com"
-            }
-          },
-          {
-            "template_codigo": "file-dest",
-            "properties": {
-              "host": "archive.example.com"
+              "channel_template": "${message.encodedData}",
+              "queue_enabled": false,
+              "retry_count": 0,
+              "validate_response": false,
+              "reattach_attachments": true
             }
           }
         ],
-        "prune_metadata_days": 30,
-        "prune_content_days": 60,
-        "archive_enabled": true,
-        "script": {
-          "script_type": "DEPLOY",
-          "script_content": "// PR10c integration test script\nreturn true;"
-        }
+        "script_type": "DEPLOY",
+        "script_content": "return;"
       }
   auth: inherit
 

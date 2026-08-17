@@ -19,9 +19,9 @@ request:
     - name: base_url
       value: http://localhost:8011
     - name: channel_id
-      value: 52863bfe-5653-425c-99cb-2643c6fd9884
+      value: 394a9988-3b45-4ce7-8e3b-acc7fada154b
     - name: message_id
-      value: "9"
+      value: "139231"
     - name: user_id
       value: 3f2e9b1a-6c4d-4a2f-9e21-7d8b5c1a9f30
     - name: feature
