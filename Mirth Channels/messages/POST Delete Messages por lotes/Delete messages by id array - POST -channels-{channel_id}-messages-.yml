@@ -1,0 +1,116 @@
+info:
+  name: Delete messages by id array - POST /channels/{channel_id}/messages/
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/messages/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "messageIds": [100, 98, 102, 97]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 204 No Content - messages deleted
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/messages/"
+      method: POST
+      body:
+        type: text
+        data: |-
+          {
+            "messageIds": [100, 98, 102, 97]
+          }
+    response:
+      status: 204
+      statusText: No Content
+      body:
+        type: text
+        data: ""
+  - name: 400 Bad Request - missing or empty messageIds
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/messages/"
+      method: POST
+      body:
+        type: text
+        data: |-
+          {
+            "messageIds": []
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "errors": {
+              "messageIds": ["This list may not be empty."]
+            }
+          }
+  - name: 404 Not Found - channel does not exist
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/channels/does-not-exist/messages/"
+      method: POST
+      body:
+        type: text
+        data: |-
+          {
+            "messageIds": [100, 98, 102, 97]
+          }
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "detail": "The specified channel does not exist in Mirth."
+          }
+  - name: 503 Service Unavailable - Mirth down
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/messages/"
+      method: POST
+      body:
+        type: text
+        data: |-
+          {
+            "messageIds": [100, 98, 102, 97]
+          }
+    response:
+      status: 503
+      statusText: Service Unavailable
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "MIRTH.UNAVAILABLE",
+              "message": "Mirth service is unavailable.",
+              "details": null
+            }
+          }
+
+docs: "Path params: channel_id (Mirth channel UUID). Body: messageIds (non-empty array of Mirth message ids)."

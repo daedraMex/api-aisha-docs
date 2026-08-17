@@ -1,0 +1,65 @@
+info:
+  name: Delete a single message - DELETE /channels/{channel_id}/messages/{message_id}/
+  type: http
+  seq: 1
+
+http:
+  method: DELETE
+  url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/messages/{{message_id}}/"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 204 No Content - message deleted
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/messages/{{message_id}}/"
+      method: DELETE
+    response:
+      status: 204
+      statusText: No Content
+      body:
+        type: text
+        data: ""
+  - name: 404 Not Found - channel or message does not exist
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/messages/999999999/"
+      method: DELETE
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "detail": "The specified channel or message does not exist in Mirth."
+          }
+  - name: 503 Service Unavailable - Mirth down
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/messages/{{message_id}}/"
+      method: DELETE
+    response:
+      status: 503
+      statusText: Service Unavailable
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "MIRTH.UNAVAILABLE",
+              "message": "Mirth service is unavailable.",
+              "details": null
+            }
+          }
+
+docs: "Path params: channel_id (Mirth channel UUID), message_id (Mirth message id)."
