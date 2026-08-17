@@ -29,15 +29,259 @@ examples:
         type: json
         data: |-
           {
-            "message_id": 128,
-            "channel_id": "2df22637-35e3-47cd-942a-8328aacb12cb",
-            "status": "SENT",
-            "received_date": "2026-05-08T12:00:00+00:00",
-            "send_date": "2026-05-08T12:00:01+00:00",
-            "response_date": "2026-05-08T12:00:02+00:00",
-            "metadata": {
-              "MRN": "12345"
-            }
+            "total": 11,
+            "data": [
+              {
+                "channel_id": "704cac88-ea6b-4829-9855-8b84ca8c83b2",
+                "name": "API_WORKLIST",
+                "enabled": true,
+                "status": "ENABLED",
+                "description": "",
+                "last_modified": "2026-06-18T10:48:46-06:00",
+                "source": {
+                  "transport": "HTTP Listener",
+                  "properties_class": null
+                },
+                "destinations": [
+                  {
+                    "metadata_id": "1",
+                    "name": "CREATE",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  },
+                  {
+                    "metadata_id": "4",
+                    "name": "UPDATE",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  },
+                  {
+                    "metadata_id": "7",
+                    "name": "CANCEL",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  },
+                  {
+                    "metadata_id": "5",
+                    "name": "Destination 1",
+                    "transport": "TCP Sender",
+                    "properties_class": null
+                  }
+                ]
+              },
+              {
+                "channel_id": "24a584d3-8fcd-43ad-b51e-79ed84aa3b6a",
+                "name": "CATA-SENT-NOAMED",
+                "enabled": true,
+                "status": "ENABLED",
+                "description": "",
+                "last_modified": "2026-07-21T14:29:44-06:00",
+                "source": {
+                  "transport": "Database Reader",
+                  "properties_class": null
+                },
+                "destinations": [
+                  {
+                    "metadata_id": "1",
+                    "name": "log",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  },
+                  {
+                    "metadata_id": "2",
+                    "name": "Sent to Cata Endpoint",
+                    "transport": "HTTP Sender",
+                    "properties_class": null
+                  },
+                  {
+                    "metadata_id": "3",
+                    "name": "Sent to Cata Endpoint  v2",
+                    "transport": "HTTP Sender",
+                    "properties_class": null
+                  }
+                ]
+              },
+              {
+                "channel_id": "caaa88b1-6256-4917-adcd-3b79fae466dd",
+                "name": "Channel 1",
+                "enabled": true,
+                "status": "ENABLED",
+                "description": "",
+                "last_modified": "2026-05-11T11:12:11-06:00",
+                "source": {
+                  "transport": "Channel Reader",
+                  "properties_class": null
+                },
+                "destinations": [
+                  {
+                    "metadata_id": "1",
+                    "name": "Destination 1",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  }
+                ]
+              },
+              {
+                "channel_id": "602b228b-304d-4463-86a1-b945412d6dd1",
+                "name": "Creacion manual canal 2",
+                "enabled": true,
+                "status": "ENABLED",
+                "description": "Ejemplo de canal",
+                "last_modified": "2026-05-11T11:12:11-06:00",
+                "source": {
+                  "transport": "Channel Reader",
+                  "properties_class": null
+                },
+                "destinations": [
+                  {
+                    "metadata_id": "1",
+                    "name": "Destination 1",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  }
+                ]
+              },
+              {
+                "channel_id": "394a9988-3b45-4ce7-8e3b-acc7fada154b",
+                "name": "JOB_DAILY_CHANNEL_STATISTICS",
+                "enabled": true,
+                "status": "ENABLED",
+                "description": "",
+                "last_modified": "2026-07-21T14:48:46-06:00",
+                "source": {
+                  "transport": "JavaScript Reader",
+                  "properties_class": null
+                },
+                "destinations": [
+                  {
+                    "metadata_id": "1",
+                    "name": "Destination 1",
+                    "transport": "JavaScript Writer",
+                    "properties_class": null
+                  }
+                ]
+              },
+              {
+                "channel_id": "8edd40f4-9c64-45d1-a786-8034bf0e3e5b",
+                "name": "Test Basico Scripts",
+                "enabled": true,
+                "status": "ENABLED",
+                "description": "Prueba manual - channel reader a channel writer con deploy script",
+                "last_modified": "2026-05-11T11:12:11-06:00",
+                "source": {
+                  "transport": "Channel Reader",
+                  "properties_class": null
+                },
+                "destinations": [
+                  {
+                    "metadata_id": "1",
+                    "name": "Destination 1",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  }
+                ]
+              },
+              {
+                "channel_id": "341262e0-b906-4d74-b718-a1a7527d6e81",
+                "name": "chanel",
+                "enabled": true,
+                "status": "ENABLED",
+                "description": "",
+                "last_modified": "2026-08-04T05:32:12-06:00",
+                "source": {
+                  "transport": "Channel Reader",
+                  "properties_class": null
+                },
+                "destinations": [
+                  {
+                    "metadata_id": "1",
+                    "name": "Destination 1",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  }
+                ]
+              },
+              {
+                "channel_id": "0e8c5ab9-8a6a-47d2-a5fe-b7f3834c783a",
+                "name": "channelReaderTest",
+                "enabled": true,
+                "status": "ENABLED",
+                "description": "Es canal de prueba channelReader",
+                "last_modified": "2026-08-10T15:03:13-06:00",
+                "source": {
+                  "transport": "Channel Reader",
+                  "properties_class": null
+                },
+                "destinations": [
+                  {
+                    "metadata_id": "1",
+                    "name": "Destination 1",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  }
+                ]
+              },
+              {
+                "channel_id": "5f9adc69-5da5-456c-967d-69c30e7ae32f",
+                "name": "keycloak",
+                "enabled": true,
+                "status": "ENABLED",
+                "description": "",
+                "last_modified": "2026-06-17T10:43:13-06:00",
+                "source": {
+                  "transport": "Channel Reader",
+                  "properties_class": null
+                },
+                "destinations": [
+                  {
+                    "metadata_id": "1",
+                    "name": "Destination 1",
+                    "transport": "JavaScript Writer",
+                    "properties_class": null
+                  }
+                ]
+              },
+              {
+                "channel_id": "9e8f89eb-b6db-43f0-95cb-5baec9038745",
+                "name": "tes-delete",
+                "enabled": true,
+                "status": "ENABLED",
+                "description": "",
+                "last_modified": "2026-08-03T10:50:35-06:00",
+                "source": {
+                  "transport": "Channel Reader",
+                  "properties_class": null
+                },
+                "destinations": [
+                  {
+                    "metadata_id": "1",
+                    "name": "Destination 1",
+                    "transport": "Channel Writer",
+                    "properties_class": null
+                  }
+                ]
+              },
+              {
+                "channel_id": "0bdb06a2-9005-4863-8b50-ee66e1dc0aad",
+                "name": "test",
+                "enabled": true,
+                "status": "ENABLED",
+                "description": "",
+                "last_modified": "2026-07-24T15:10:37-06:00",
+                "source": {
+                  "transport": "Channel Reader",
+                  "properties_class": null
+                },
+                "destinations": [
+                  {
+                    "metadata_id": "1",
+                    "name": "Destination 1",
+                    "transport": "Web Service Sender",
+                    "properties_class": null
+                  }
+                ]
+              }
+            ]
           }
   - name: 404 Not Found - channel does not exist
     request:
