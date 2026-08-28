@@ -1,0 +1,81 @@
+info:
+  name: Create Channel (raw) - POST /channels/create/
+  type: http
+  seq: 11
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/channels/create/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Test Channel",
+        "description": "Created via Bruno",
+        "initialState": "STOPPED",
+        "metadataDay": 0,
+        "contentDay": 0,
+        "enable": true
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 201 Created
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/channels/create/"
+      method: POST
+    response:
+      status: 201
+      statusText: Created
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "394a9988-3b45-4ce7-8e3b-acc7fada154b"
+          }
+  - name: 503 Service Unavailable - no active CANAL_BASE template
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/channels/create/"
+      method: POST
+    response:
+      status: 503
+      statusText: Service Unavailable
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "detail": "No active canal template found."
+          }
+  - name: 502 Bad Gateway - Mirth rejected the request
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/channels/create/"
+      method: POST
+    response:
+      status: 502
+      statusText: Bad Gateway
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "detail": "Mirth returned an error creating the channel."
+          }
+
+docs: "⚠️ Escritura real contra Mirth — crea (y opcionalmente habilita) un canal de verdad usando la plantilla CANAL_BASE activa. No correr contra un Mirth compartido sin coordinar antes. Genera un uuid, sustituye placeholders en la plantilla y postea el XML resultante a Mirth."

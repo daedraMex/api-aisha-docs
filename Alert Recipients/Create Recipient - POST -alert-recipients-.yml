@@ -1,0 +1,88 @@
+info:
+  name: Create Recipient - POST /alert-recipients/
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/alert-recipients/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Jane Doe",
+        "email": "jane.doe@example.com"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 201 Created
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-recipients/"
+      method: POST
+    response:
+      status: 201
+      statusText: Created
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "33333333-3333-3333-3333-333333333333",
+            "name": "Jane Doe",
+            "email": "jane.doe@example.com",
+            "activo": true,
+            "created_at": "2026-08-20T10:00:00Z",
+            "updated_at": "2026-08-20T10:00:00Z"
+          }
+  - name: 400 Bad Request - VALIDATION_ERROR
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-recipients/"
+      method: POST
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "ALERT_RECIPIENT.VALIDATION_ERROR",
+              "message": "Invalid request data.",
+              "details": { "email": ["Enter a valid email address."] }
+            }
+          }
+  - name: 409 Conflict - DUPLICATE_EMAIL
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-recipients/"
+      method: POST
+    response:
+      status: 409
+      statusText: Conflict
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "ALERT_RECIPIENT.DUPLICATE_EMAIL",
+              "message": "A recipient with that email already exists.",
+              "details": null
+            }
+          }

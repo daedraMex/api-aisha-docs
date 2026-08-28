@@ -1,0 +1,74 @@
+info:
+  name: Update Alert Config (Full) - PUT /alert-config/
+  type: http
+  seq: 3
+
+http:
+  method: PUT
+  url: "{{base_url}}/api/v1/integration-engine/alert-config/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "monitoring_enabled": false
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK - merged partially
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-config/"
+      method: PUT
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "monitoring_enabled": false,
+            "monitor_config": {
+              "environment": "PRODUCCION",
+              "timezone": "America/Mexico_City",
+              "monitor_frequency_seconds": 60,
+              "alert_cooldown_minutes": 10,
+              "tcp_timeout_ms": 2500
+            },
+            "thresholds": {
+              "QUEUE": { "warning": 100, "critical": 500, "blocked": 1000 }
+            }
+          }
+  - name: 404 Not Found - NOT_FOUND
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-config/"
+      method: PUT
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "ALERT_CONFIG.NOT_FOUND",
+              "message": "Alert config is not initialized. Run bootstrap_default_alert.",
+              "details": null
+            }
+          }
+
+docs: "Intentionally identical to PATCH — the singleton config has no full-replace variant. Kept as a separate request only because some HTTP clients (and this API's own contract) expose both verbs."

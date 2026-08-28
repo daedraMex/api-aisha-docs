@@ -1,0 +1,49 @@
+info:
+  name: Remove assignment - DELETE /alert-config/recipients/{recipient_id}/
+  type: http
+  seq: 2
+
+http:
+  method: DELETE
+  url: "{{base_url}}/api/v1/integration-engine/alert-config/recipients/{{recipient_id}}/"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 204 No Content - removed
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-config/recipients/11111111-1111-1111-1111-111111111111/"
+      method: DELETE
+    response:
+      status: 204
+      statusText: No Content
+      body:
+        type: text
+        data: ""
+  - name: 404 Not Found - not assigned
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-config/recipients/11111111-1111-1111-1111-111111111111/"
+      method: DELETE
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "ALERT_ASSIGNMENT.NOT_FOUND",
+              "message": "Recipient is not assigned to the alert.",
+              "details": null
+            }
+          }
+
+docs: Desuscribe un destinatario de la alerta singleton. 204 sin body.

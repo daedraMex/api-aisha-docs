@@ -1,5 +1,4 @@
-name: saas-pre
+name: dev-aws
 variables:
   - name: base_url
     value: https://wr6lgzdwy3.execute-api.us-east-1.amazonaws.com/dev
-    description: ""

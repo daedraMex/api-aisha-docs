@@ -1,0 +1,85 @@
+info:
+  name: Toggle Channel - PATCH /alert-config/channels/{channel_id}/
+  type: http
+  seq: 4
+
+http:
+  method: PATCH
+  url: "{{base_url}}/api/v1/integration-engine/alert-config/channels/{{channel_id}}/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "active": true
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK - activated
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-config/channels/{{channel_id}}/"
+      method: PATCH
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "channel_id": "394a9988-3b45-4ce7-8e3b-acc7fada154b",
+            "active": true
+          }
+  - name: 400 Bad Request - missing 'active'
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-config/channels/{{channel_id}}/"
+      method: PATCH
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "ALERT_CONFIG.VALIDATION_ERROR",
+              "message": "Invalid request data.",
+              "details": { "active": ["This field is required."] }
+            }
+          }
+  - name: 404 Not Found - config not initialized
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-config/channels/{{channel_id}}/"
+      method: PATCH
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "ALERT_CONFIG.NOT_FOUND",
+              "message": "Alert config is not initialized. Run bootstrap_default_alert.",
+              "details": null
+            }
+          }
+
+docs: "Paso 2 del wizard. channel_id no se valida contra Mirth acá — solo persiste el flag en channels_state; el nombre/estado real del canal se resuelve en GET /alert-config/ contra Mirth en vivo."

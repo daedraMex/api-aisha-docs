@@ -1,0 +1,47 @@
+info:
+  name: Delete Recipient - DELETE /alert-recipients/{recipient_id}/
+  type: http
+  seq: 7
+
+http:
+  method: DELETE
+  url: "{{base_url}}/api/v1/integration-engine/alert-recipients/{{recipient_id}}/"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 204 No Content
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-recipients/{{recipient_id}}/"
+      method: DELETE
+    response:
+      status: 204
+      statusText: No Content
+      body:
+        type: text
+        data: ""
+  - name: 404 Not Found - NOT_FOUND
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-recipients/does-not-exist/"
+      method: DELETE
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "ALERT_RECIPIENT.NOT_FOUND",
+              "message": "Alert recipient not found.",
+              "details": null
+            }
+          }

@@ -1,0 +1,106 @@
+info:
+  name: Send SMTP Test - POST /alert-config/smtp/test/
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/alert-config/smtp/test/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "to": "vos@empresa.com"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK - email sent
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-config/smtp/test/"
+      method: POST
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "success": true,
+            "message": "Test email sent to vos@empresa.com.",
+            "to": "vos@empresa.com"
+          }
+  - name: 400 Bad Request - VALIDATION_ERROR
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-config/smtp/test/"
+      method: POST
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "ALERT_SMTP.VALIDATION_ERROR",
+              "message": "Invalid request data.",
+              "details": { "to": ["This field is required."] }
+            }
+          }
+  - name: 404 Not Found - ALERT_CONFIG.NOT_FOUND
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-config/smtp/test/"
+      method: POST
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "ALERT_CONFIG.NOT_FOUND",
+              "message": "Alert config is not initialized. Run bootstrap_default_alert.",
+              "details": null
+            }
+          }
+  - name: 502 Bad Gateway - SEND_FAILED
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-config/smtp/test/"
+      method: POST
+    response:
+      status: 502
+      statusText: Bad Gateway
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "ALERT_SMTP.SEND_FAILED",
+              "message": "The configured SMTP server could not send the test email.",
+              "details": null
+            }
+          }
+
+docs: "⚠️ Envía un correo REAL vía el SmtpDestination vinculado al singleton — no es un dry-run. AllowAny + rate-limit hardcodeado de 10/min por IP (SimpleRateThrottle). El detalle del error SMTP real nunca se expone al caller (details siempre null), queda solo en logs del server."

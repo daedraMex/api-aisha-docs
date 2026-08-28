@@ -1,0 +1,49 @@
+info:
+  name: Remove Assignment - DELETE /alert-config/recipients/{recipient_id}/
+  type: http
+  seq: 4
+
+http:
+  method: DELETE
+  url: "{{base_url}}/api/v1/integration-engine/alert-config/recipients/{{recipient_id}}/"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 204 No Content
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-config/recipients/{{recipient_id}}/"
+      method: DELETE
+    response:
+      status: 204
+      statusText: No Content
+      body:
+        type: text
+        data: ""
+  - name: 404 Not Found - ASSIGNMENT_NOT_FOUND
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-config/recipients/{{recipient_id}}/"
+      method: DELETE
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "ALERT_ASSIGNMENT.NOT_FOUND",
+              "message": "Recipient is not assigned to the alert.",
+              "details": null
+            }
+          }
+
+docs: "Quita al destinatario de ESTA alerta — el contacto sigue existiendo en la libreta global (/alert-recipients/), solo se borra la asignación."

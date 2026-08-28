@@ -29,7 +29,14 @@ examples:
         type: json
         data: |-
           {
-            "id": "414c70dc-fdb4-4307-ab30-fa7e6d404dc1",
+            "monitoring_enabled": true,
+            "monitor_config": {
+              "environment": "PRODUCCION",
+              "timezone": "America/Mexico_City",
+              "monitor_frequency_seconds": 60,
+              "alert_cooldown_minutes": 10,
+              "tcp_timeout_ms": 2500
+            },
             "thresholds": {
               "QUEUE": { "warning": 100, "critical": 500, "blocked": 1000 },
               "ERROR_RATE": { "warning": 3, "critical": 5 },
@@ -37,11 +44,7 @@ examples:
               "JVM_MEMORY_PCT": { "warning": 80, "critical": 90 },
               "JVM_THREADS": { "warning": 250, "critical": 400 }
             },
-            "channels": [
-              { "channel_id": "11111111-1111-1111-1111-111111111111", "channel_name": "worklistSAAS", "active": false },
-              { "channel_id": "22222222-2222-2222-2222-222222222222", "channel_name": "ISH-Ordenes", "active": true }
-            ],
-            "smtp_config": {
+            "smtp": {
               "smtp_host": "smtp.ejemplo.com",
               "smtp_port": 587,
               "requires_authentication": false,
@@ -49,9 +52,9 @@ examples:
               "sender_email": "remitente@ejemplo.com",
               "subject": "Alerta de sistema"
             },
-            "recipients": [
-              { "id": "r1", "name": "Victor", "email": "victor@empresa.com", "active": true },
-              { "id": "r2", "name": "Radiologia", "email": "radio@empresa.com", "active": false }
+            "channels": [
+              { "channel_id": "11111111-1111-1111-1111-111111111111", "channel_name": "worklistSAAS", "active": false },
+              { "channel_id": "22222222-2222-2222-2222-222222222222", "channel_name": "ISH-Ordenes", "active": true }
             ]
           }
   - name: 404 Not Found - no alert configured
@@ -70,9 +73,9 @@ examples:
           {
             "error": {
               "code": "ALERT_CONFIG.NOT_FOUND",
-              "message": "No alert configuration exists.",
+              "message": "Alert config is not initialized. Run bootstrap_default_alert.",
               "details": null
             }
           }
 
-docs: 'Returns the AishaAlert config (aggregate root): thresholds, channel toggles, SMTP config, and recipients — the 4 steps of the "Nueva alerta" wizard in one shot. No user_id scoping yet (not standardized across the service) — returns the first (oldest, by created_at) AishaAlert row found. thresholds is returned as raw JSON pass-through, not a fixed schema.'
+docs: 'Returns the AishaAlert singleton (aggregate root): general/thresholds + smtp + channels (resolved live against Mirth) in one shot. No user_id scoping (config is global, not per-user) — returns the oldest AishaAlert row by created_at. Recipients are NOT embedded here anymore — see "Destinatarios Asignados" for /alert-config/recipients/, and "Alert Recipients" for the global library.'

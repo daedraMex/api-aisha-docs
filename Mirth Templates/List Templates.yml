@@ -17,7 +17,7 @@ settings:
 examples:
   - name: Success - 200 OK
     request:
-      url: "{{base_url}}/api/v1/integration-engine/plantillas/"
+      url: "{{base_url}}/api/v1/integration-engine/templates/"
       method: GET
     response:
       status: 200
@@ -76,7 +76,7 @@ examples:
           ]
   - name: Success - 200 OK (empty)
     request:
-      url: "{{base_url}}/api/v1/integration-engine/plantillas/"
+      url: "{{base_url}}/api/v1/integration-engine/templates/"
       method: GET
     response:
       status: 200

@@ -1,0 +1,75 @@
+info:
+  name: Update Recipient (Full) - PUT /alert-recipients/{recipient_id}/
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: "{{base_url}}/api/v1/integration-engine/alert-recipients/{{recipient_id}}/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Jane Doe",
+        "email": "jane.doe@example.com"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-recipients/{{recipient_id}}/"
+      method: PUT
+      body:
+        type: json
+        data: |-
+          {
+            "name": "Jane Doe",
+            "email": "jane.doe@example.com"
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "33333333-3333-3333-3333-333333333333",
+            "name": "Jane Doe",
+            "email": "jane.doe@example.com",
+            "activo": true,
+            "created_at": "2026-08-20T10:00:00Z",
+            "updated_at": "2026-08-20T10:05:00Z"
+          }
+  - name: 404 Not Found - NOT_FOUND
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-recipients/does-not-exist/"
+      method: PUT
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "ALERT_RECIPIENT.NOT_FOUND",
+              "message": "Alert recipient not found.",
+              "details": null
+            }
+          }

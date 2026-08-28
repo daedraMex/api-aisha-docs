@@ -1,0 +1,57 @@
+info:
+  name: List Assigned Recipients - GET /alert-config/recipients/
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{base_url}}/api/v1/integration-engine/alert-config/recipients/"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-config/recipients/"
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "data": [
+              { "recipient_id": "33333333-3333-3333-3333-333333333333", "name": "Jane Doe", "email": "jane.doe@example.com", "activo": true }
+            ]
+          }
+  - name: 404 Not Found - config not initialized
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-config/recipients/"
+      method: GET
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "ALERT_CONFIG.NOT_FOUND",
+              "message": "Alert config is not initialized. Run bootstrap_default_alert.",
+              "details": null
+            }
+          }
+
+docs: "Los invitados de ESTA alerta — no confundir con la libreta global (carpeta 'Alert Recipients' / GET /alert-recipients/). Este endpoint solo lista referencias (recipient_id) a contactos que ya existen en la libreta."

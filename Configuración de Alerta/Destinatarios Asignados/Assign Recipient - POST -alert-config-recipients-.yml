@@ -1,0 +1,86 @@
+info:
+  name: Assign Recipient - POST /alert-config/recipients/
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/alert-config/recipients/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "recipient_id": "{{recipient_id}}"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 201 Created - new assignment
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-config/recipients/"
+      method: POST
+    response:
+      status: 201
+      statusText: Created
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "recipient_id": "33333333-3333-3333-3333-333333333333",
+            "name": "Jane Doe",
+            "email": "jane.doe@example.com",
+            "activo": true
+          }
+  - name: 200 OK - already assigned (idempotent)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-config/recipients/"
+      method: POST
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "recipient_id": "33333333-3333-3333-3333-333333333333",
+            "name": "Jane Doe",
+            "email": "jane.doe@example.com",
+            "activo": true
+          }
+  - name: 404 Not Found - recipient_id no existe en la libreta
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-config/recipients/"
+      method: POST
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "ALERT_RECIPIENT.NOT_FOUND",
+              "message": "Alert recipient not found.",
+              "details": null
+            }
+          }
+
+docs: "recipient_id debe existir en la libreta global (/alert-recipients/) primero — este endpoint solo referencia, no crea contactos. Idempotente: reasignar a alguien ya asignado devuelve 200 sin cambios, no error."

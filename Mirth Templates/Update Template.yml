@@ -5,7 +5,7 @@ info:
 
 http:
   method: PUT
-  url: "{{base_url}}/api/v1/integration-engine/plantillas/{{template_id}}/"
+  url: "{{base_url}}/api/v1/integration-engine/templates/{{template_id}}/"
   headers:
     - name: Content-Type
       value: application/json
@@ -27,7 +27,7 @@ settings:
 examples:
   - name: Success - 204 No Content
     request:
-      url: "{{base_url}}/api/v1/integration-engine/plantillas/{{template_id}}/"
+      url: "{{base_url}}/api/v1/integration-engine/templates/{{template_id}}/"
       method: PUT
     response:
       status: 204
@@ -37,7 +37,7 @@ examples:
         data: ""
   - name: Error - 404 Not Found
     request:
-      url: "{{base_url}}/api/v1/integration-engine/plantillas/{{template_id}}/"
+      url: "{{base_url}}/api/v1/integration-engine/templates/{{template_id}}/"
       method: PUT
     response:
       status: 404

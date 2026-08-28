@@ -1,0 +1,67 @@
+info:
+  name: Toggle Assignment Active - PATCH /alert-config/recipients/{recipient_id}/
+  type: http
+  seq: 3
+
+http:
+  method: PATCH
+  url: "{{base_url}}/api/v1/integration-engine/alert-config/recipients/{{recipient_id}}/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "activo": false
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK - toggled to inactive
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-config/recipients/{{recipient_id}}/"
+      method: PATCH
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "recipient_id": "33333333-3333-3333-3333-333333333333",
+            "name": "Jane Doe",
+            "email": "jane.doe@example.com",
+            "activo": false
+          }
+  - name: 404 Not Found - ASSIGNMENT_NOT_FOUND
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-config/recipients/{{recipient_id}}/"
+      method: PATCH
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "ALERT_ASSIGNMENT.NOT_FOUND",
+              "message": "Recipient is not assigned to the alert.",
+              "details": null
+            }
+          }
+
+docs: "Togglea la suscripción a ESTA alerta, no el contacto en la libreta (ese es PATCH /alert-recipients/{id}/toggle/). ASSIGNMENT_NOT_FOUND != RECIPIENT_NOT_FOUND: significa que el contacto existe en la libreta pero no está asignado."
