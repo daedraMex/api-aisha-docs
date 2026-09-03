@@ -1,0 +1,81 @@
+info:
+  name: Update SMTP Destination (Full) - PUT /smtp-destinations/{destination_id}/
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: "{{base_url}}/api/v1/integration-engine/smtp-destinations/{{destination_id}}/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Alertas críticas",
+        "smtp_host": "smtp.example.com",
+        "smtp_port": 587,
+        "requires_authentication": false,
+        "recipients": ["alerts@example.com"],
+        "sender_email": "noreply@example.com",
+        "subject": "Alerta del sistema actualizada"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/smtp-destinations/{{destination_id}}/"
+      method: PUT
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "44444444-4444-4444-4444-444444444444",
+            "user_id": "",
+            "name": "Alertas críticas",
+            "smtp_host": "smtp.example.com",
+            "smtp_port": 587,
+            "requires_authentication": false,
+            "smtp_username": "",
+            "smtp_password": "",
+            "recipients": ["alerts@example.com"],
+            "sender_email": "noreply@example.com",
+            "subject": "Alerta del sistema actualizada",
+            "activo": true,
+            "created_at": "2026-09-02T10:00:00Z",
+            "updated_at": "2026-09-02T10:05:00Z"
+          }
+  - name: 404 Not Found - NOT_FOUND
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/smtp-destinations/does-not-exist/"
+      method: PUT
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "SMTP_DESTINATION.NOT_FOUND",
+              "message": "SMTP destination not found.",
+              "details": null
+            }
+          }

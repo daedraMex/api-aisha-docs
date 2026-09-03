@@ -1,7 +1,7 @@
 info:
   name: SMTP Destinations
   type: folder
-  seq: 13
+  seq: 12
 
 request:
   auth: inherit

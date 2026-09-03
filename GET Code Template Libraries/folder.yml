@@ -1,7 +1,7 @@
 info:
-  name: Alert Recipients
+  name: GET Code Template Libraries
   type: folder
-  seq: 15
+  seq: 1
 
 request:
   auth: inherit

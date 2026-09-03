@@ -1,11 +1,11 @@
 info:
-  name: Delete SMTP Destination
+  name: Delete SMTP Destination - DELETE /smtp-destinations/{destination_id}/
   type: http
-  seq: 5
+  seq: 6
 
 http:
   method: DELETE
-  url: "{{base_url}}/api/v1/integration-engine/users/{{user_id}}/smtp-destinations/{{destination_id}}/"
+  url: "{{base_url}}/api/v1/integration-engine/smtp-destinations/{{destination_id}}/"
   auth: inherit
 
 settings:
@@ -15,9 +15,9 @@ settings:
   maxRedirects: 5
 
 examples:
-  - name: Success - 204 No Content
+  - name: 204 No Content
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/smtp-destinations/{{destination_id}}/"
       method: DELETE
     response:
       status: 204
@@ -25,9 +25,9 @@ examples:
       body:
         type: text
         data: ""
-  - name: Error - 404 Not Found
+  - name: 404 Not Found - NOT_FOUND
     request:
-      url: ""
+      url: "{{base_url}}/api/v1/integration-engine/smtp-destinations/does-not-exist/"
       method: DELETE
     response:
       status: 404

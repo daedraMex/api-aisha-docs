@@ -1,0 +1,121 @@
+info:
+  name: Create SMTP Destination - POST /smtp-destinations/
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/smtp-destinations/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Alertas críticas",
+        "smtp_host": "smtp.example.com",
+        "smtp_port": 587,
+        "requires_authentication": false,
+        "recipients": ["alerts@example.com"],
+        "sender_email": "noreply@example.com",
+        "subject": "Alerta del sistema"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 201 Created
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/smtp-destinations/"
+      method: POST
+    response:
+      status: 201
+      statusText: Created
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "44444444-4444-4444-4444-444444444444",
+            "user_id": "",
+            "name": "Alertas críticas",
+            "smtp_host": "smtp.example.com",
+            "smtp_port": 587,
+            "requires_authentication": false,
+            "smtp_username": "",
+            "smtp_password": "",
+            "recipients": ["alerts@example.com"],
+            "sender_email": "noreply@example.com",
+            "subject": "Alerta del sistema",
+            "activo": true,
+            "created_at": "2026-09-02T10:00:00Z",
+            "updated_at": "2026-09-02T10:00:00Z"
+          }
+  - name: 400 Bad Request - VALIDATION_ERROR
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/smtp-destinations/"
+      method: POST
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "SMTP_DESTINATION.VALIDATION_ERROR",
+              "message": "Invalid request data.",
+              "details": { "sender_email": ["Enter a valid email address."] }
+            }
+          }
+  - name: 400 Bad Request - AUTH_CREDENTIALS_REQUIRED
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/smtp-destinations/"
+      method: POST
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "SMTP_DESTINATION.AUTH_CREDENTIALS_REQUIRED",
+              "message": "smtp_username and smtp_password are required when requires_authentication is True.",
+              "details": null
+            }
+          }
+  - name: 409 Conflict - DUPLICATE_NAME
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/smtp-destinations/"
+      method: POST
+    response:
+      status: 409
+      statusText: Conflict
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "SMTP_DESTINATION.DUPLICATE_NAME",
+              "message": "An SMTP destination with that name already exists.",
+              "details": null
+            }
+          }
