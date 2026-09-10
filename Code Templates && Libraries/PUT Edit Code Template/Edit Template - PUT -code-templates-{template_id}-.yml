@@ -1,0 +1,324 @@
+info:
+  name: Edit Template - PUT /code-templates/{template_id}/
+  type: http
+  seq: 1
+
+http:
+  method: PUT
+  url: "{{base_url}}/api/v1/integration-engine/code-templates/{{template_id}}/"
+  headers:
+    - name: Content-Type
+      value: application/json
+    - name: If-Match
+      value: '"{{revision}}"'
+  body:
+    type: json
+    data: |-
+      {
+        "code": "function sayHello(){ /* comentario */ return 'Hello' }"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: "if (res.getStatus() === 200) {\r
+
+        \    const body = res.getBody();\r
+
+        \    bru.setCollectionVar('revision', body.revision);\r
+
+        }\r
+
+        test('status is 200', () => expect(res.getStatus()).to.equal(200));"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 200 OK - Code actualizado (revision N+1)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/code-templates/{{template_id}}/"
+      method: PUT
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: If-Match
+          value: '"1"'
+      body:
+        type: json
+        data: |-
+          {
+            "code": "function sayHello(){ /* edited */ return 'Hello' }"
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: ETag
+          value: '"2"'
+        - name: X-Correlation-Id
+          value: 6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c
+      body:
+        type: json
+        data: |-
+          {
+            "id": "659f8ddf-28bf-4471-8194-4d6b35305c58",
+            "name": "BrunoTestTemplate",
+            "library_id": "f0051631-2453-49c5-97f1-7dc13c736021",
+            "revision": 2,
+            "type": "FUNCTION",
+            "context_types": ["SOURCE_FILTER_TRANSFORMER"],
+            "code": "return message; // edited",
+            "last_modified": "2026-09-10T05:25:40.201Z"
+          }
+  - name: 400 Bad Request - INVALID_BODY (code vacío)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/code-templates/{{template_id}}/"
+      method: PUT
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: If-Match
+          value: '"1"'
+      body:
+        type: json
+        data: |-
+          {
+            "code": ""
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: X-Correlation-Id
+          value: 7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "INVALID_BODY",
+              "message": {
+                "code": ["This field may not be blank."]
+              }
+            },
+            "correlation_id": "7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d"
+          }
+  - name: 404 Not Found - Template no existe (NOT_FOUND)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/code-templates/does-not-exist-template-id/"
+      method: PUT
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: If-Match
+          value: '"1"'
+      body:
+        type: json
+        data: |-
+          {
+            "code": "return message;"
+          }
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: X-Correlation-Id
+          value: 8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "NOT_FOUND",
+              "message": "Code template 'does-not-exist-template-id' not found in Mirth."
+            },
+            "correlation_id": "8b9c0d1e-2f3a-4b5c-6d7e-8f9a0b1c2d3e"
+          }
+  - name: 412 Precondition Failed - REVISION_MISMATCH
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/code-templates/{{template_id}}/"
+      method: PUT
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: If-Match
+          value: '"999999"'
+      body:
+        type: json
+        data: |-
+          {
+            "code": "return message; // revision vieja a proposito"
+          }
+    response:
+      status: 412
+      statusText: Precondition Failed
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: X-Correlation-Id
+          value: 9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "REVISION_MISMATCH",
+              "message": "If-Match revision 999999 does not match the current revision 2."
+            },
+            "correlation_id": "9c0d1e2f-3a4b-5c6d-7e8f-9a0b1c2d3e4f",
+            "current_revision": 2
+          }
+  - name: 422 Unprocessable Entity - SYNTAX_ERROR
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/code-templates/{{template_id}}/"
+      method: PUT
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: If-Match
+          value: '"1"'
+      body:
+        type: json
+        data: |-
+          {
+            "code": "function( { return"
+          }
+    response:
+      status: 422
+      statusText: Unprocessable Entity
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: X-Correlation-Id
+          value: 0d1e2f3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "SYNTAX_ERROR",
+              "message": "1 code template(s) failed JavaScript syntax validation."
+            },
+            "correlation_id": "0d1e2f3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a",
+            "errors": [
+              {
+                "templateName": "BrunoTestTemplate",
+                "line": 1,
+                "column": 18,
+                "message": "Unexpected token {"
+              }
+            ]
+          }
+  - name: 428 Precondition Required - IF_MATCH_REQUIRED
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/code-templates/{{template_id}}/"
+      method: PUT
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "code": "return message; // sin If-Match"
+          }
+    response:
+      status: 428
+      statusText: Precondition Required
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: X-Correlation-Id
+          value: 1e2f3a4b-5c6d-7e8f-9a0b-1c2d3e4f5a6b
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "IF_MATCH_REQUIRED",
+              "message": "If-Match header is required."
+            },
+            "correlation_id": "1e2f3a4b-5c6d-7e8f-9a0b-1c2d3e4f5a6b"
+          }
+  - name: 502 Bad Gateway - MIRTH_WRITE_FAILED
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/code-templates/{{template_id}}/"
+      method: PUT
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: If-Match
+          value: '"1"'
+      body:
+        type: json
+        data: |-
+          {
+            "code": "return message;"
+          }
+    response:
+      status: 502
+      statusText: Bad Gateway
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: X-Correlation-Id
+          value: 2f3a4b5c-6d7e-8f9a-0b1c-2d3e4f5a6b7c
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "MIRTH_WRITE_FAILED",
+              "message": "Mirth did not confirm the write."
+            },
+            "correlation_id": "2f3a4b5c-6d7e-8f9a-0b1c-2d3e4f5a6b7c"
+          }
+  - name: 503 Service Unavailable - Mirth caído (MIRTH_UNAVAILABLE)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/code-templates/{{template_id}}/"
+      method: PUT
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: If-Match
+          value: '"1"'
+      body:
+        type: json
+        data: |-
+          {
+            "code": "return message;"
+          }
+    response:
+      status: 503
+      statusText: Service Unavailable
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: Retry-After
+          value: "30"
+        - name: X-Correlation-Id
+          value: 3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "MIRTH_UNAVAILABLE",
+              "message": "Mirth is unavailable. Retry later."
+            },
+            "correlation_id": "3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d"
+          }
+
+docs: "Reemplaza únicamente el `code` de un template existente, con concurrencia optimista POR TEMPLATE (nunca por library). Requiere correr antes el POST de creación para tener {{template_id}} y {{revision}}. IMPORTANTE: la revision del próximo If-Match se lee del BODY (`revision`) de esta misma respuesta, nunca del header ETag."

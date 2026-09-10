@@ -1,0 +1,310 @@
+info:
+  name: Create Template - POST /code-template-libraries/{library_id}/code-templates/
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{base_url}}/api/v1/integration-engine/code-template-libraries/{{library_id}}/code-templates/"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "TestTemplate1",
+        "code": "function sayHello(){return 'Hello';}"
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: library_id
+      value: e2796523-a69d-4af1-a1f3-78d7b9021b2b
+  scripts:
+    - type: after-response
+      code: "if (res.getStatus() === 201) {\r
+
+        \    const body = res.getBody();\r
+
+        \    bru.setCollectionVar('template_id', body.id);\r
+
+        \    bru.setCollectionVar('revision', body.revision);\r
+
+        }\r
+
+        test('status is 201', () => expect(res.getStatus()).to.equal(201));"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 201 Created - Template creado
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/code-template-libraries/{{library_id}}/code-templates/"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "name": "TestTemplate",
+            "code": "function sayHello(){return 'Hello';}"
+          }
+    response:
+      status: 201
+      statusText: Created
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: ETag
+          value: '"1"'
+        - name: X-Correlation-Id
+          value: 3f29b1d4-8a2e-4b7a-9c1d-6e5f8a0b2c3d
+      body:
+        type: json
+        data: |-
+          {
+            "id": "659f8ddf-28bf-4471-8194-4d6b35305c58",
+            "name": "BrunoTestTemplate",
+            "library_id": "f0051631-2453-49c5-97f1-7dc13c736021",
+            "revision": 1,
+            "type": "FUNCTION",
+            "context_types": ["SOURCE_FILTER_TRANSFORMER"],
+            "code": "return message;",
+            "last_modified": "2026-09-10T05:19:19.894Z"
+          }
+  - name: 201 Created - dry_run=true (no escribe en Mirth)
+    description: |-
+      Caso de uso:
+      1. Preview antes de confirmar en un wizard del front. El usuario arma un template, aprieta algo tipo "Vista previa" y ve exactamente qué se crearía — incluyendo los context_types por default que se le aplicarían si no puso ninguno — sin comprometerse todavía. Recién con un segundo click real (dry_run ausente/false) se escribe en Mirth . /n
+      2. Validar sin ensuciar Mirth con basura de prueba. Como valida lint + existencia de library de verdad, sirve para chequear "¿esto pasaría?" en QA/testing/scripts sin dejar templates de prueba dando vueltas en las libraries reales que después alguien tiene que borrar a mano.
+      3. Chequeo previo en un import masivo. Si en algún momento arman un flujo de "importar N templates", correr cada uno primero en dry_run deja detectar cuáles fallarían (JS inválido, library inexistente) antes de comprometerse a escribir el lote entero.
+      4. Retries seguros durante debugging. Como nunca escribe ni audita, se puede llamar las veces que haga falta mientras se depura un payload, sin miedo a duplicar nada en Mirth.
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/code-template-libraries/{{library_id}}/code-templates/"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "name": "DryRunTemplate",
+            "code": "function sayHello(){return 'Hello';}",
+            "dry_run": true
+          }
+    response:
+      status: 201
+      statusText: Created
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: ETag
+          value: '"1"'
+        - name: X-Correlation-Id
+          value: 8a1c2d3e-4f5a-6b7c-8d9e-0f1a2b3c4d5e
+      body:
+        type: json
+        data: |-
+          {
+            "id": "c9e1a2b3-4d5e-6f7a-8b9c-0d1e2f3a4b5c",
+            "name": "BrunoDryRunTemplate",
+            "library_id": "f0051631-2453-49c5-97f1-7dc13c736021",
+            "revision": 1,
+            "type": "FUNCTION",
+            "context_types": [
+              "SOURCE_FILTER_TRANSFORMER",
+              "DESTINATION_RESPONSE_TRANSFORMER",
+              "DESTINATION_DISPATCHER",
+              "SOURCE_RECEIVER",
+              "DESTINATION_FILTER_TRANSFORMER"
+            ],
+            "code": "return message;",
+            "last_modified": "2026-09-10T05:20:01.114Z"
+          }
+  - name: 400 Bad Request - INVALID_BODY (name inválido)
+    description: " Falla la regex del serializer (^[A-Za-z0-9_]{1,100}$) — INVALID_BODY, antes de tocar el handler"
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/code-template-libraries/{{library_id}}/code-templates/"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "name": "nombre con espacios!",
+            "code": "return message;"
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: X-Correlation-Id
+          value: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "INVALID_BODY",
+              "message": {
+                "name": ["This value does not match the required pattern."]
+              }
+            },
+            "correlation_id": "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d"
+          }
+  - name: 404 Not Found - Library no existe (NOT_FOUND)
+    description: " LibraryNotFound — el get_library_template_ids no encuentra la library"
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/code-template-libraries/does-not-exist-library-id/code-templates/"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "name": "TestTemplate",
+            "code": "return message;"
+          }
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: X-Correlation-Id
+          value: 2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "NOT_FOUND",
+              "message": "Code template library 'does-not-exist-library-id' not found in Mirth."
+            },
+            "correlation_id": "2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e"
+          }
+  - name: 422 Unprocessable Entity - SYNTAX_ERROR (JS inválido)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/code-template-libraries/{{library_id}}/code-templates/"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "name": "BrunoBadSyntax",
+            "code": "function( { return"
+          }
+    response:
+      status: 422
+      statusText: Unprocessable Entity
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: X-Correlation-Id
+          value: 3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "SYNTAX_ERROR",
+              "message": "1 code template(s) failed JavaScript syntax validation."
+            },
+            "correlation_id": "3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f",
+            "errors": [
+              {
+                "templateName": "BrunoBadSyntax",
+                "line": 1,
+                "column": 18,
+                "message": "Unexpected token {"
+              }
+            ]
+          }
+  - name: 502 Bad Gateway - MIRTH_WRITE_FAILED
+    description: 'Valida un falso positivo : Mirth responde HTTP 200 con {"ok": true, "data": {"templatesAddedToLibrary": 0, "templatesModified": 0}}, nosotros igual lo tratamos como error, aunque el ok diga true.'
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/code-template-libraries/{{library_id}}/code-templates/"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "name": "TestTemplate",
+            "code": "return message;"
+          }
+    response:
+      status: 502
+      statusText: Bad Gateway
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: X-Correlation-Id
+          value: 4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "MIRTH_WRITE_FAILED",
+              "message": "Import accepted (ok=true) but confirmed no effect for template 'c9e1a2b3-...': templatesAddedToLibrary=0 templatesModified=0."
+            },
+            "correlation_id": "4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a"
+          }
+  - name: 503 Service Unavailable - Mirth caído (MIRTH_UNAVAILABLE)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/code-template-libraries/{{library_id}}/code-templates/"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "name": "TestTemplate",
+            "code": "return message;"
+          }
+    response:
+      status: 503
+      statusText: Service Unavailable
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: Retry-After
+          value: "30"
+        - name: X-Correlation-Id
+          value: 5e6f7a8b-9c0d-1e2f-3a4b-5c6d7e8f9a0b
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "MIRTH_UNAVAILABLE",
+              "message": "Mirth is unavailable. Retry later."
+            },
+            "correlation_id": "5e6f7a8b-9c0d-1e2f-3a4b-5c6d7e8f9a0b"
+          }
+
+docs: "Crea un template nuevo con UNA sola escritura additiva a Mirth (POST /libraries/import): crea el template Y lo deja asociado a la library en el mismo paso, nunca dos pasos separados. `context_types` y `dry_run` son opcionales. IMPORTANTE: la revision para el próximo If-Match se lee del campo `revision` del BODY JSON de la respuesta, nunca del header ETag (este servicio no expone Access-Control-Expose-Headers)."

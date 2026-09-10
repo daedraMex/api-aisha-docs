@@ -1,0 +1,87 @@
+info:
+  name: Get alert config - GET /alert-config/ copy
+  type: http
+  seq: 6
+
+http:
+  method: DELETE
+  url: "{{base_url}}/api/v1/integration-engine/alert-config/{{id_channel_delete}}"
+  auth: inherit
+
+runtime:
+  variables:
+    - name: id_channel_delete
+      value: 914f918d-ded9-4fd2-9b34-ae0353e7e4d9
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true
+
+examples:
+  - name: "200 OK "
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-config/"
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "monitoring_enabled": true,
+            "monitor_config": {
+              "environment": "PRODUCCION",
+              "timezone": "America/Mexico_City",
+              "monitor_frequency_seconds": 60,
+              "alert_cooldown_minutes": 10,
+              "tcp_timeout_ms": 2500
+            },
+            "thresholds": {
+              "QUEUE": { "warning": 100, "critical": 500, "blocked": 1000 },
+              "ERROR_RATE": { "warning": 3, "critical": 5 },
+              "BACKLOG_MINUTES": { "warning": 10, "critical": 30 },
+              "JVM_MEMORY_PCT": { "warning": 80, "critical": 90 },
+              "JVM_THREADS": { "warning": 250, "critical": 400 }
+            },
+            "smtp": {
+              "smtp_host": "smtp.ejemplo.com",
+              "smtp_port": 587,
+              "requires_authentication": false,
+              "smtp_username": "",
+              "sender_email": "remitente@ejemplo.com",
+              "subject": "Alerta de sistema"
+            },
+            "channels": [
+              { "channel_id": "11111111-1111-1111-1111-111111111111", "channel_name": "worklistSAAS", "active": false },
+              { "channel_id": "22222222-2222-2222-2222-222222222222", "channel_name": "ISH-Ordenes", "active": true }
+            ]
+          }
+  - name: 404 Not Found - no alert configured
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/alert-config/"
+      method: GET
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "ALERT_CONFIG.NOT_FOUND",
+              "message": "Alert config is not initialized. Run bootstrap_default_alert.",
+              "details": null
+            }
+          }
+
+docs: 'Returns the AishaAlert singleton (aggregate root): general/thresholds + smtp + channels (resolved live against Mirth) in one shot. No user_id scoping (config is global, not per-user) — returns the oldest AishaAlert row by created_at. Recipients are NOT embedded here anymore — see "Destinatarios Asignados" for /alert-config/recipients/, and "Alert Recipients" for the global library.'

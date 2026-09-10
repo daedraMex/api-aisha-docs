@@ -29,11 +29,15 @@ request:
     - name: filter_id
       value: 9e73c186-ce07-4429-abe6-d8691d98bf7f
     - name: template_id
-      value: ce08a9ce-1a8a-47c4-a7e5-b93b0a50fc6e
+      value: 012d397a-6863-4805-8ced-1ef908c92848
     - name: destination_id
       value: 9ff0346e-1522-413b-8166-e3dfd1b3fca7
     - name: draft_id
       value: e1f2a3b4-c5d6-4e7f-8a9b-0c1d2e3f4a5b
+    - name: revision
+      value:
+        type: number
+        data: "2"
 
 docs:
   content: ms-integration-engine — Mirth Connect bridge, channel management, saved filters and per-user channel instances. No authentication required (AllowAny on every endpoint). Organized by feature.

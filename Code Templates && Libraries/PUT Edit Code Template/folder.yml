@@ -1,0 +1,7 @@
+info:
+  name: PUT Edit Code Template
+  type: folder
+  seq: 1
+
+request:
+  auth: inherit
