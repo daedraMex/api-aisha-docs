@@ -29,7 +29,7 @@ request:
     - name: filter_id
       value: 9e73c186-ce07-4429-abe6-d8691d98bf7f
     - name: template_id
-      value: 012d397a-6863-4805-8ced-1ef908c92848
+      value: 3817aa08-ac15-4793-83e8-0af5da0ff03d
     - name: destination_id
       value: 9ff0346e-1522-413b-8166-e3dfd1b3fca7
     - name: draft_id

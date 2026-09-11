@@ -1,7 +1,7 @@
 info:
   name: mirth - solo equipo backend
   type: folder
-  seq: 17
+  seq: 16
 
 request:
   auth: inherit
