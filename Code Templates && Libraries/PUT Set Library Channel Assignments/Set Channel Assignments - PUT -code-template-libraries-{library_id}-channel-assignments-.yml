@@ -1,0 +1,306 @@
+info:
+  name: Set Channel Assignments - PUT /code-template-libraries/{library_id}/channel-assignments/
+  type: http
+  seq: 1
+
+http:
+  method: PUT
+  url: "{{base_url}}/api/v1/integration-engine/code-template-libraries/{{library_id}}/channel-assignments/"
+  headers:
+    - name: Content-Type
+      value: application/json
+    - name: If-Match
+      value: '"{{revision}}"'
+  body:
+    type: json
+    data: |-
+      {
+        "revision": 5,
+        "enabled_channel_ids": [
+           "4e720c54-be7f-4362-9051-91bc148e4db1",
+            "4244cb5d-03dc-43b5-88ae-b27c3ae6f782"
+        ],
+        "disabled_channel_ids": [
+             "4e720c54-be7f-4362-9051-91bc148e4db1",
+              "4244cb5d-03dc-43b5-88ae-b27c3ae6f782",
+              "2fe95f45-a9ec-400c-a0f0-f621d8ae438e",
+              "ba7b23dd-8448-414a-8c80-f804a834d18c",
+              "53c430a6-2bce-4d38-8076-6768e9a78c43",
+              "3947c4aa-dee8-4fa3-beb5-8382eb2e8e20",
+              "8c5392c0-3876-4470-872c-f503fdc6a0ca",
+              "7a1bbabf-8a1f-47e8-9cb8-a85d11ff081b",
+              "07fc0b36-e4f9-4923-abed-f3bb4b9c1082",
+              "e9133c56-fd6f-4e43-be7f-157ac2023670",
+              "dfe9676f-e557-4aa6-b1a7-342b4f7e9cc2",
+              "c1beb2db-71a3-4955-9b05-5ecd9088ebab"
+        ]
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: library_id
+      value: 5a08cdd5-e7fd-4f95-afb9-388fd75e1044
+  scripts:
+    - type: after-response
+      code: "if (res.getStatus() === 200) {\r
+
+        \    const body = res.getBody();\r
+
+        \    bru.setCollectionVar('revision', body.revision);\r
+
+        }\r
+
+        test('status is 200', () => expect(res.getStatus()).to.equal(200));"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 200 OK - Canales actualizados (revision N+1)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/code-template-libraries/{{library_id}}/channel-assignments/"
+      method: PUT
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: If-Match
+          value: '"17"'
+      body:
+        type: json
+        data: |-
+          {
+            "enabled_channel_ids": ["8edd40f4-9c64-45d1-a786-8034bf0e3e5b"],
+            "disabled_channel_ids": ["caaa88b1-6256-4917-adcd-3b79fae466dd"]
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: ETag
+          value: '"18"'
+        - name: X-Correlation-Id
+          value: 4b5c6d7e-8f9a-0b1c-2d3e-4f5a6b7c8d9e
+      body:
+        type: json
+        data: |-
+          {
+            "id": "e2796523-a69d-4af1-a1f3-78d7b9021b2b",
+            "revision": 18,
+            "enabled_channel_ids": ["8edd40f4-9c64-45d1-a786-8034bf0e3e5b"],
+            "disabled_channel_ids": ["caaa88b1-6256-4917-adcd-3b79fae466dd"]
+          }
+  - name: 400 Bad Request - INVALID_BODY (falta enabled_channel_ids)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/code-template-libraries/{{library_id}}/channel-assignments/"
+      method: PUT
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: If-Match
+          value: '"17"'
+      body:
+        type: json
+        data: |-
+          {
+            "disabled_channel_ids": []
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: X-Correlation-Id
+          value: 5c6d7e8f-9a0b-1c2d-3e4f-5a6b7c8d9e0f
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "INVALID_BODY",
+              "message": {
+                "enabled_channel_ids": ["This field is required."]
+              }
+            },
+            "correlation_id": "5c6d7e8f-9a0b-1c2d-3e4f-5a6b7c8d9e0f"
+          }
+  - name: 404 Not Found - Library no existe (NOT_FOUND)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/code-template-libraries/does-not-exist-library-id/channel-assignments/"
+      method: PUT
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: If-Match
+          value: '"17"'
+      body:
+        type: json
+        data: |-
+          {
+            "enabled_channel_ids": [],
+            "disabled_channel_ids": []
+          }
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: X-Correlation-Id
+          value: 6d7e8f9a-0b1c-2d3e-4f5a-6b7c8d9e0f1a
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "NOT_FOUND",
+              "message": "Code template library 'does-not-exist-library-id' not found in Mirth."
+            },
+            "correlation_id": "6d7e8f9a-0b1c-2d3e-4f5a-6b7c8d9e0f1a"
+          }
+  - name: 412 Precondition Failed - REVISION_MISMATCH
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/code-template-libraries/{{library_id}}/channel-assignments/"
+      method: PUT
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: If-Match
+          value: '"999999"'
+      body:
+        type: json
+        data: |-
+          {
+            "enabled_channel_ids": ["8edd40f4-9c64-45d1-a786-8034bf0e3e5b"],
+            "disabled_channel_ids": ["caaa88b1-6256-4917-adcd-3b79fae466dd"]
+          }
+    response:
+      status: 412
+      statusText: Precondition Failed
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: X-Correlation-Id
+          value: 7e8f9a0b-1c2d-3e4f-5a6b-7c8d9e0f1a2b
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "REVISION_MISMATCH",
+              "message": "If-Match revision 999999 does not match the current revision 17."
+            },
+            "correlation_id": "7e8f9a0b-1c2d-3e4f-5a6b-7c8d9e0f1a2b",
+            "current_revision": 17
+          }
+  - name: 428 Precondition Required - IF_MATCH_REQUIRED
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/code-template-libraries/{{library_id}}/channel-assignments/"
+      method: PUT
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "enabled_channel_ids": ["8edd40f4-9c64-45d1-a786-8034bf0e3e5b"],
+            "disabled_channel_ids": ["caaa88b1-6256-4917-adcd-3b79fae466dd"]
+          }
+    response:
+      status: 428
+      statusText: Precondition Required
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: X-Correlation-Id
+          value: 8f9a0b1c-2d3e-4f5a-6b7c-8d9e0f1a2b3c
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "IF_MATCH_REQUIRED",
+              "message": "If-Match header is required."
+            },
+            "correlation_id": "8f9a0b1c-2d3e-4f5a-6b7c-8d9e0f1a2b3c"
+          }
+  - name: 502 Bad Gateway - MIRTH_WRITE_FAILED
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/code-template-libraries/{{library_id}}/channel-assignments/"
+      method: PUT
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: If-Match
+          value: '"17"'
+      body:
+        type: json
+        data: |-
+          {
+            "enabled_channel_ids": ["8edd40f4-9c64-45d1-a786-8034bf0e3e5b"],
+            "disabled_channel_ids": ["caaa88b1-6256-4917-adcd-3b79fae466dd"]
+          }
+    response:
+      status: 502
+      statusText: Bad Gateway
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: X-Correlation-Id
+          value: 9a0b1c2d-3e4f-5a6b-7c8d-9e0f1a2b3c4d
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "MIRTH_WRITE_FAILED",
+              "message": "Revision did not increment (was 17, still 17)."
+            },
+            "correlation_id": "9a0b1c2d-3e4f-5a6b-7c8d-9e0f1a2b3c4d"
+          }
+  - name: 503 Service Unavailable - Mirth caido (MIRTH_UNAVAILABLE)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/code-template-libraries/{{library_id}}/channel-assignments/"
+      method: PUT
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: If-Match
+          value: '"17"'
+      body:
+        type: json
+        data: |-
+          {
+            "enabled_channel_ids": ["8edd40f4-9c64-45d1-a786-8034bf0e3e5b"],
+            "disabled_channel_ids": ["caaa88b1-6256-4917-adcd-3b79fae466dd"]
+          }
+    response:
+      status: 503
+      statusText: Service Unavailable
+      headers:
+        - name: Content-Type
+          value: application/json
+        - name: Retry-After
+          value: "30"
+        - name: X-Correlation-Id
+          value: 0b1c2d3e-4f5a-6b7c-8d9e-0f1a2b3c4d5e
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "MIRTH_UNAVAILABLE",
+              "message": "Mirth is unavailable. Retry later."
+            },
+            "correlation_id": "0b1c2d3e-4f5a-6b7c-8d9e-0f1a2b3c4d5e"
+          }
+
+docs: "Reemplaza las listas COMPLETAS `enabled_channel_ids`/`disabled_channel_ids` de una library existente, con concurrencia optimista POR LIBRARY (If-Match sobre `revision`, igual convención que el endpoint de templates). No es un delta/toggle: hay que mandar el estado final completo de ambas listas, no solo los canales que cambiaron -- coincide 1:1 con un formulario de checkboxes tipo 'Select All/Deselect All' que ya tiene el estado completo al hacer submit. `include_new_channels` queda deliberadamente fuera de este endpoint (diferido a una version futura). IMPORTANTE: la revision del proximo If-Match se lee del campo `revision` del BODY JSON de esta misma respuesta, nunca del header ETag."

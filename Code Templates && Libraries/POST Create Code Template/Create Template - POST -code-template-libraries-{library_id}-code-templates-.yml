@@ -21,7 +21,7 @@ http:
 runtime:
   variables:
     - name: library_id
-      value: e2796523-a69d-4af1-a1f3-78d7b9021b2b
+      value: 5a08cdd5-e7fd-4f95-afb9-388fd75e1044
   scripts:
     - type: after-response
       code: "if (res.getStatus() === 201) {\r

@@ -1,0 +1,7 @@
+info:
+  name: PUT Set Library Channel Assignments
+  type: folder
+  seq: 3
+
+request:
+  auth: inherit
