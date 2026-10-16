@@ -1,5 +1,5 @@
 info:
-  name: Channel Action (start/stop/deploy/undeploy)
+  name: Channel Action (start/stop/pause/restart/deploy/undeploy)
   type: http
   seq: 9
 
@@ -44,7 +44,101 @@ examples:
         type: json
         data: |-
           {
-            "detail": "Action 'pause' is not allowed. Valid actions: [start, stop, deploy, undeploy]"
+            "detail": "Action 'reboot' is not allowed. Valid actions: ['deploy', 'pause', 'restart', 'start', 'stop', 'undeploy']"
+          }
+  - name: Restart - 204 No Content (PAUSED channel stopped and started)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/restart/"
+      method: POST
+    response:
+      status: 204
+      statusText: No Content
+      body:
+        type: text
+        data: ""
+  - name: Restart - 409 Conflict (channel is not PAUSED)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/restart/"
+      method: POST
+    response:
+      status: 409
+      statusText: Conflict
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "detail": "Channel can only be restarted when it is PAUSED (current state: STARTED)."
+          }
+  - name: Restart - 409 Conflict (channel not deployed)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/restart/"
+      method: POST
+    response:
+      status: 409
+      statusText: Conflict
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "detail": "Channel can only be restarted when it is PAUSED (current state: NOT_DEPLOYED)."
+          }
+  - name: Restart - 404 Not Found (channel does not exist in Mirth)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/restart/"
+      method: POST
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "detail": "The specified channel does not exist in Mirth."
+          }
+  - name: Restart - 503 Service Unavailable (Mirth unreachable)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/restart/"
+      method: POST
+    response:
+      status: 503
+      statusText: Service Unavailable
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": {
+              "code": "MIRTH.UNAVAILABLE",
+              "message": "Mirth service is unavailable.",
+              "details": null
+            }
+          }
+  - name: Restart - 503 Service Unavailable (stopped but start failed)
+    request:
+      url: "{{base_url}}/api/v1/integration-engine/channels/{{channel_id}}/restart/"
+      method: POST
+    response:
+      status: 503
+      statusText: Service Unavailable
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "detail": "Channel restart did not complete: the channel may have been left stopped. Check its state in Mirth and start it manually."
           }
 
-docs: "The last path segment is the action and must be one of: start, stop, deploy, undeploy. No request body."
+docs: "The last path segment is the action and must be one of: start, stop, pause, restart, deploy, undeploy. No request body. 'restart' only works on a PAUSED channel: it stops and starts it again (409 for any other state). Requires the restart_channel permission."
