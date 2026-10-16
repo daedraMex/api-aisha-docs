@@ -11,7 +11,7 @@ http:
 runtime:
   variables:
     - name: action
-      value: start
+      value: resume
 
 settings:
   encodeUrl: true
